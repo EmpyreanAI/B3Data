@@ -3,6 +3,7 @@ import glob
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
+from indicators import stochastic_oscilator
 
 def prices(year, cod, month=1, period=1):
     path = "../BovespaWolf/data/COTAHIST_A" + str(year) + ".TXT.csv"
