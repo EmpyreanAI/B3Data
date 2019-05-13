@@ -118,32 +118,32 @@ def macd(data, window_size_1=3, window_size_2=4):
 
 d = [10, 9, 6, 7, 8, 11, 30]
 
-print("stochastic_oscilator")
-print(stochastic_oscilator(d, 3))
+# print("stochastic_oscilator")
+# print(stochastic_oscilator(d, 3))
 
-print("mso")
-print(mso(d, 3))
+# print("mso")
+# print(mso(d, 3))
 
-print("sso")
-print(sso(d, 3))
+# print("sso")
+# print(sso(d, 3))
 
-print("rate_of_change")
-print(rate_of_change(d, 3))
+# print("rate_of_change")
+# print(rate_of_change(d, 3))
 
-print("momentum")
-print(momentum(d, 3))
+# print("momentum")
+# print(momentum(d, 3))
 
-print("moving avg")
-print(moving_avg(d, 3))
+# print("moving avg")
+# print(moving_avg(d, 3))
 
-print("moving var")
-print(moving_var(d, 3))
+# print("moving var")
+# print(moving_var(d, 3))
 
-print("mv ratio")
-print(mv_ratio(d, 3))
+# print("mv ratio")
+# print(mv_ratio(d, 3))
 
-print("exponencial movie avg")
-print(exponencial_movie_avg(d, 3))
+# print("exponencial movie avg")
+# print(exponencial_movie_avg(d, 3))
 
-print("macd")
-print(macd(d, 3, 4))
+# print("macd")
+# print(macd(d, 3, 4))
