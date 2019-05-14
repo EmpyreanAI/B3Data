@@ -6,14 +6,17 @@ import math
 from indicators import stochastic_oscilator
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Activation
 from keras.layers import LSTM
+from keras.layers import Embedding
 from keras.layers import GRU
+from keras.utils import np_utils
 from keras.utils import plot_model
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 import glob
 
-def prices(year=2015, cod='ELET3', month=1, period=6):
+def prices(year=2014, cod='PETR4', month=9, period=3):
     path = "../BovespaWolf/data/COTAHIST_A" + str(year) + ".TXT.csv"
     files = glob.glob(path)
 
@@ -63,21 +66,34 @@ def prices(year=2015, cod='ELET3', month=1, period=6):
 
         filtered = df.loc[df['CODNEG'] == cod]
 
-        next_month = (month + period) % 12
+        next_month = (month + period) % 13
 
-        stocks = filtered.loc[(filtered['DATA'] > str(year) + '-' + str(month) + '-01') & 
-                              (filtered['DATA'] <= str(year) + '-' + str(next_month) + '-01')]
-        
+        stocks = filtered.loc[(filtered['DATA'] > str(year) + '-' + str(month) + '-01') &
+                              (filtered['DATA'] <= str(year) + '-' + str(next_month) + '-30')]
+
         return stocks['PREULT']
 
 # convert an array of values into a dataset matrix
 def create_dataset(dataset, look_back=1):
-	dataX, dataY = [], []
-	for i in range(len(dataset)-look_back-1):
-		a = dataset[i:(i+look_back), 0]
-		dataX.append(a)
-		dataY.append(dataset[i + look_back, 0])
-	return numpy.array(dataX), numpy.array(dataY)
+    dataX, dataY = [], []
+    for i in range(len(dataset)-look_back-1):
+        day_t = dataset[i:(i+look_back), 0]
+        day_t1 = dataset[i + look_back, 0]
+        dataX.append(day_t)
+        if day_t > day_t1:
+            dataY.append(0)
+        else:
+            dataY.append(1)
+    return numpy.array(dataX), numpy.array(dataY)
+
+def to_zero_one(vector):
+    for i in range(0, len(vector)-1):
+        if vector[i] > vector[i+1]:
+            vector[i] = 0
+        else:
+            vector[i] = 1
+
+    return vector
 
 # fix random seed for reproducibility
 numpy.random.seed(7)
@@ -86,10 +102,8 @@ numpy.random.seed(7)
 dataframe = prices()
 dataset = dataframe.values
 dataset = dataset.astype('float32')
-dataset = numpy.asarray(stochastic_oscilator(dataset, 14))
+dataset = numpy.asarray(dataset)
 dataset = dataset.reshape(len(dataset), 1)
-
-# import pdb; pdb.set_trace()
 
 # normalize the dataset
 scaler = MinMaxScaler(feature_range=(0, 1))
@@ -104,47 +118,67 @@ train, test = dataset[0:train_size,:], dataset[train_size:len(dataset),:]
 look_back = 1
 trainX, trainY = create_dataset(train, look_back)
 testX, testY = create_dataset(test, look_back)
+print(trainY)
+print(testY)
+
+trainY = to_zero_one(trainY)
+testY = to_zero_one(testY)
 
 # reshape input to be [samples, time steps, features]
 trainX = numpy.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
 testX = numpy.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
-import pdb; pdb.set_trace()
+# import pdb; pdb.set_trace()
 
 # create and fit the LSTM network
 model = Sequential()
 model.add(LSTM(4, input_shape=(1, look_back)))
-model.add(Dense(1))
-model.compile(loss='mean_squared_error', optimizer='adam')
+model.add(Dense(1, activation='sigmoid', input_shape=(1, look_back)))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+print(model.summary())
 model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
+
+scores = model.evaluate(testX, testY, verbose=2)
+print("Accuracy: %.2f%%" % (scores[1]*100))
 
 # make predictions
 trainPredict = model.predict(trainX)
 testPredict = model.predict(testX)
 
+print("Trains predict: ")
+print(trainPredict)
+print("Test predict: ")
+print(testPredict)
+
 # invert predictions
-trainPredict = scaler.inverse_transform(trainPredict)
-trainY = scaler.inverse_transform([trainY])
-testPredict = scaler.inverse_transform(testPredict)
-testY = scaler.inverse_transform([testY])
+
+# trainPredict = scaler.inverse_transform(trainPredict)
+# trainY = to_zero_one(trainY)
+# testPredict = scaler.inverse_transform(testPredict)
+# testY = to_zero_one(testY)
+
 
 # calculate root mean squared error
-trainScore = math.sqrt(mean_squared_error(trainY[0], trainPredict[:,0]))
-print('Train Score: %.2f RMSE' % (trainScore))
-testScore = math.sqrt(mean_squared_error(testY[0], testPredict[:,0]))
-print('Test Score: %.2f RMSE' % (testScore))
 
-# shift train predictions for plotting
-trainPredictPlot = numpy.empty_like(dataset)
-trainPredictPlot[:, :] = numpy.nan
-trainPredictPlot[look_back:len(trainPredict)+look_back, :] = trainPredict
-
-# shift test predictions for plotting
-testPredictPlot = numpy.empty_like(dataset)
-testPredictPlot[:, :] = numpy.nan
-testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
-
-# plot baseline and predictions
-plt.plot(scaler.inverse_transform(dataset))
-plt.plot(trainPredictPlot)
-plt.plot(testPredictPlot)
-plt.show()
+# trainScore = math.sqrt(mean_squared_error(trainY[0], trainPredict[:,0]))
+# print('Train Score: %.2f RMSE' % (trainScore))
+# testScore = math.sqrt(mean_squared_error(testY[0], testPredict[:,0]))
+# print('Test Score: %.2f RMSE' % (testScore))
+#
+# # shift train predictions for plotting
+#
+# trainPredictPlot = numpy.empty_like(dataset)
+# trainPredictPlot[:, :] = numpy.nan
+# trainPredictPlot[look_back:len(trainPredict)+look_back, :] = trainPredict
+#
+# # shift test predictions for plotting
+#
+# testPredictPlot = numpy.empty_like(dataset)
+# testPredictPlot[:, :] = numpy.nan
+# testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
+#
+# # plot baseline and predictions
+#
+# plt.plot(scaler.inverse_transform(dataset))
+# plt.plot(trainPredictPlot)
+# plt.plot(testPredictPlot)
+# plt.show()
