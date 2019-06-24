@@ -68,7 +68,7 @@ def sso(data, window_size=3):
 def moving_var(data, window_size=3):
     indicator_values = []
 
-    avgs = moving_avg(d, 3)
+    avgs = moving_avg(data, 3)
     for i in range(window_size, len(data)+1):
         window = data[i-window_size:i]
         sum = 0
@@ -76,12 +76,14 @@ def moving_var(data, window_size=3):
             sum += (window[j]-avgs[i-window_size])**2
         indicator_values.append(sum/window_size)
 
+
+    print(indicator_values)
     return indicator_values
 
 def mv_ratio(data, window_size=3):
     indicator_values = []
 
-    vars = moving_var(d, 3)
+    vars = moving_var(data, 3)
     for i in range(window_size, len(vars)+1):
         window = vars[i-window_size:i]
         mv_t = window[-1]
@@ -116,7 +118,7 @@ def macd(data, window_size_1=3, window_size_2=4):
     return indicators_values
 
 
-d = [10, 9, 6, 7, 8, 11, 30]
+# d = [10, 9, 6, 7, 8, 11, 30]
 
 # print("stochastic_oscilator")
 # print(stochastic_oscilator(d, 3))
