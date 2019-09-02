@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>denselstm API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>denselstm</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from keras.models import Sequential
+from keras.layers import LSTM
+from keras.layers import Dense
+from keras.layers import Dropout
+from keras.utils import np_utils
+from hyperas.distributions import choice
+from sklearn.metrics import mean_squared_error
+from neuralnetwork import NeuralNetwork
+from sklearn.preprocessing import MinMaxScaler
+from keras.utils import to_categorical
+import numpy
+
+class DenseLSTM(NeuralNetwork):
+  &#34;&#34;&#34;
+    This is the class responsible for create keras LSTM. It can be Dense with several
+    LSTM cells or a single LSTM cell without Dense Layer.
+  &#34;&#34;&#34;
+  def __init__(self, look_back=12, dense=False, lstm_cells=1, input_shape=1):
+    self.look_back = look_back
+    self.dense = dense
+    self.lstm_cells = lstm_cells
+    self.input_shape = input_shape
+    self.model = self.__create_model()
+
+  def __create_model(self):
+    model = Sequential()
+    lstm_cells = 1 if not self.dense else self.lstm_cells
+    model.add(LSTM(lstm_cells, input_shape=(self.input_shape, self.look_back)))
+    if self.dense:
+      model.add(Dense(1))
+    model.compile(loss=&#39;binary_crossentropy&#39;,
+                  optimizer=&#39;adam&#39;,
+                  metrics=[&#39;acc&#39;])
+    print(model.summary())
+
+    return model
+
+  def __create_label(self, dataset, mean_of=0):
+    dataX, dataY = [], []
+
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    dataset = scaler.fit_transform(dataset)
+
+    for i in range(len(dataset)-self.look_back):
+        day_t = dataset[i:(i+self.look_back)]
+        day_t1 = dataset[i + self.look_back]
+        dataX.append(day_t)
+        if day_t.mean(axis=mean_of)[mean_of] &gt; day_t1[mean_of]:
+            dataY.append(0)
+        else:
+            dataY.append(1)
+
+    return numpy.array(dataX), numpy.array(dataY)
+
+  def create_data_for_fit(self, dataset, train_proportion=0.66, mean_of=0):
+    &#34;&#34;&#34;
+    Create the labels and reshape the data according to parameters of
+    DenseLSTM(look_back, input_shape)
+
+    Parameters
+    ----------
+    dataset : list
+      List of one or several features [feature_1, feature_2, ....]
+    train_proportion : float
+      It should be between 0.0 and 1.0 and represent the proportion of
+      data set to include in the test split.
+    mean_of : int
+      The dataset parameter can have several features. The label is
+      generated based on the mean of one of this features along the
+      interval decided by look_back parameter in DenseLSTM. So label[0] will be
+      the value of mean(feature_1[0], ... , feature_1[look_back])
+    &#34;&#34;&#34;
+    dataX, dataY = self.__create_label(dataset)
+
+    train_size = int(len(dataset) * train_proportion)
+    test_size = len(dataset) - train_size
+    train, test = dataset[0:train_size], dataset[train_size:len(dataset)]
+
+    trainX, testX = dataX[0:train_size,:], dataX[train_size:len(dataX):]
+    trainY, testY = dataY[0:train_size], dataY[train_size:len(dataX)]
+
+    trainX = numpy.reshape(trainX, (trainX.shape[0], self.look_back, trainX.shape[2]))
+    testX = numpy.reshape(testX, (testX.shape[0], self.look_back, testX.shape[2]))
+    trainX = numpy.array([t.transpose() for t in trainX])
+    testX = numpy.array([t.transpose() for t in testX])
+
+    self.trainX = trainX; self.trainY = trainY
+    self.testX = testX; self.testY = testY</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="denselstm.DenseLSTM"><code class="flex name class">
+<span>class <span class="ident">DenseLSTM</span></span>
+<span>(</span><span>look_back=12, dense=False, lstm_cells=1, input_shape=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This is the class responsible for create keras LSTM. It can be Dense with several
+LSTM cells or a single LSTM cell without Dense Layer.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DenseLSTM(NeuralNetwork):
+  &#34;&#34;&#34;
+    This is the class responsible for create keras LSTM. It can be Dense with several
+    LSTM cells or a single LSTM cell without Dense Layer.
+  &#34;&#34;&#34;
+  def __init__(self, look_back=12, dense=False, lstm_cells=1, input_shape=1):
+    self.look_back = look_back
+    self.dense = dense
+    self.lstm_cells = lstm_cells
+    self.input_shape = input_shape
+    self.model = self.__create_model()
+
+  def __create_model(self):
+    model = Sequential()
+    lstm_cells = 1 if not self.dense else self.lstm_cells
+    model.add(LSTM(lstm_cells, input_shape=(self.input_shape, self.look_back)))
+    if self.dense:
+      model.add(Dense(1))
+    model.compile(loss=&#39;binary_crossentropy&#39;,
+                  optimizer=&#39;adam&#39;,
+                  metrics=[&#39;acc&#39;])
+    print(model.summary())
+
+    return model
+
+  def __create_label(self, dataset, mean_of=0):
+    dataX, dataY = [], []
+
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    dataset = scaler.fit_transform(dataset)
+
+    for i in range(len(dataset)-self.look_back):
+        day_t = dataset[i:(i+self.look_back)]
+        day_t1 = dataset[i + self.look_back]
+        dataX.append(day_t)
+        if day_t.mean(axis=mean_of)[mean_of] &gt; day_t1[mean_of]:
+            dataY.append(0)
+        else:
+            dataY.append(1)
+
+    return numpy.array(dataX), numpy.array(dataY)
+
+  def create_data_for_fit(self, dataset, train_proportion=0.66, mean_of=0):
+    &#34;&#34;&#34;
+    Create the labels and reshape the data according to parameters of
+    DenseLSTM(look_back, input_shape)
+
+    Parameters
+    ----------
+    dataset : list
+      List of one or several features [feature_1, feature_2, ....]
+    train_proportion : float
+      It should be between 0.0 and 1.0 and represent the proportion of
+      data set to include in the test split.
+    mean_of : int
+      The dataset parameter can have several features. The label is
+      generated based on the mean of one of this features along the
+      interval decided by look_back parameter in DenseLSTM. So label[0] will be
+      the value of mean(feature_1[0], ... , feature_1[look_back])
+    &#34;&#34;&#34;
+    dataX, dataY = self.__create_label(dataset)
+
+    train_size = int(len(dataset) * train_proportion)
+    test_size = len(dataset) - train_size
+    train, test = dataset[0:train_size], dataset[train_size:len(dataset)]
+
+    trainX, testX = dataX[0:train_size,:], dataX[train_size:len(dataX):]
+    trainY, testY = dataY[0:train_size], dataY[train_size:len(dataX)]
+
+    trainX = numpy.reshape(trainX, (trainX.shape[0], self.look_back, trainX.shape[2]))
+    testX = numpy.reshape(testX, (testX.shape[0], self.look_back, testX.shape[2]))
+    trainX = numpy.array([t.transpose() for t in trainX])
+    testX = numpy.array([t.transpose() for t in testX])
+
+    self.trainX = trainX; self.trainY = trainY
+    self.testX = testX; self.testY = testY</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>neuralnetwork.NeuralNetwork</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="denselstm.DenseLSTM.create_data_for_fit"><code class="name flex">
+<span>def <span class="ident">create_data_for_fit</span></span>(<span>self, dataset, train_proportion=0.66, mean_of=0)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create the labels and reshape the data according to parameters of
+DenseLSTM(look_back, input_shape)</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>dataset</code></strong> :&ensp;<code>list</code></dt>
+<dd>&nbsp;</dd>
+<dt>List of one or several features [feature_1, feature_2, ....]</dt>
+<dt><strong><code>train_proportion</code></strong> :&ensp;<code>float</code></dt>
+<dd>&nbsp;</dd>
+<dt>It should be between 0.0 and 1.0 and represent the proportion of</dt>
+<dt>data set to include in the test split.</dt>
+<dt><strong><code>mean_of</code></strong> :&ensp;<code>int</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>The dataset parameter can have several features. The label is
+generated based on the mean of one of this features along the
+interval decided by look_back parameter in DenseLSTM. So label[0] will be
+the value of mean(feature_1[0], &hellip; , feature_1[look_back])</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_data_for_fit(self, dataset, train_proportion=0.66, mean_of=0):
+  &#34;&#34;&#34;
+  Create the labels and reshape the data according to parameters of
+  DenseLSTM(look_back, input_shape)
+
+  Parameters
+  ----------
+  dataset : list
+    List of one or several features [feature_1, feature_2, ....]
+  train_proportion : float
+    It should be between 0.0 and 1.0 and represent the proportion of
+    data set to include in the test split.
+  mean_of : int
+    The dataset parameter can have several features. The label is
+    generated based on the mean of one of this features along the
+    interval decided by look_back parameter in DenseLSTM. So label[0] will be
+    the value of mean(feature_1[0], ... , feature_1[look_back])
+  &#34;&#34;&#34;
+  dataX, dataY = self.__create_label(dataset)
+
+  train_size = int(len(dataset) * train_proportion)
+  test_size = len(dataset) - train_size
+  train, test = dataset[0:train_size], dataset[train_size:len(dataset)]
+
+  trainX, testX = dataX[0:train_size,:], dataX[train_size:len(dataX):]
+  trainY, testY = dataY[0:train_size], dataY[train_size:len(dataX)]
+
+  trainX = numpy.reshape(trainX, (trainX.shape[0], self.look_back, trainX.shape[2]))
+  testX = numpy.reshape(testX, (testX.shape[0], self.look_back, testX.shape[2]))
+  trainX = numpy.array([t.transpose() for t in trainX])
+  testX = numpy.array([t.transpose() for t in testX])
+
+  self.trainX = trainX; self.trainY = trainY
+  self.testX = testX; self.testY = testY</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="denselstm.DenseLSTM" href="#denselstm.DenseLSTM">DenseLSTM</a></code></h4>
+<ul class="">
+<li><code><a title="denselstm.DenseLSTM.create_data_for_fit" href="#denselstm.DenseLSTM.create_data_for_fit">create_data_for_fit</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
