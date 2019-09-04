@@ -2,13 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
+
 class Ploter(object):
     """docstring for Ploter."""
 
     def box_plot(self, data):
         fig, ax = plt.subplots()
         # csfont = {'fontname':'Comic Sans MS'}
-        hfont = {'fontname':'monospace'}
+        hfont = {'fontname': 'monospace'}
         # ax.set_title('PLS KILL ME', **hfont)
         ax.set_xlabel('Window Size', **hfont)
         ax.set_ylabel('Accuracy', **hfont)
@@ -50,6 +51,7 @@ class Ploter(object):
         data = [data, d2, d2[::2, 0], data]
         print(data)
         return data
+
 
 plot = Ploter()
 plot.box_plot([])
