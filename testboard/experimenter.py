@@ -10,9 +10,8 @@ class Experimenter(object):
 
   def __init__(self):
     self.plotter = Plotter()
-    self.stocks = ['BBAS3', 'BVMF3']
-    # self.stocks = ['PETR3', 'ABEV3', 'VALE3', 'BBAS3', 'BVMF3']
-    self.years = [2014, 2015, 2016, 2017]
+    self.stocks = ['PETR3', 'ABEV3', 'VALE3', 'BBAS3', 'BVMF3']
+    self.years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
     all_fields = [CLOSING]
     self.fields = []
 
@@ -40,7 +39,7 @@ class Experimenter(object):
 
   def execute_experiment(self, year, stock, fields):
     results = []
-    stocks = Stocks(year=year, cod=stock)
+    stocks = Stocks(year=year, cod=stock, period=6)
     dataset = stocks.selected_fields(fields)
     sequencial_kfold = SequencialKFold(n_split=10)
     for i in [0.25, 0.50, 0.75, 1]:
