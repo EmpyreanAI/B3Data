@@ -10,7 +10,7 @@ class Experimenter(object):
 
   def __init__(self):
     self.plotter = Plotter()
-    self.stocks = ['VALE3', 'BBAS3', 'BVMF3']
+    self.stocks = ['BBAS3', 'BVMF3']
     # self.stocks = ['PETR3', 'ABEV3', 'VALE3', 'BBAS3', 'BVMF3']
     self.years = [2014, 2015, 2016, 2017]
     all_fields = [CLOSING]
