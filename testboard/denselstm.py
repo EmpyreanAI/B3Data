@@ -31,7 +31,7 @@ class DenseLSTM(NeuralNetwork):
     model.compile(loss='binary_crossentropy',
                   optimizer='adam',
                   metrics=['acc'])
-    print(model.summary())
+    # print(model.summary())
 
     return model
 
@@ -51,6 +51,9 @@ class DenseLSTM(NeuralNetwork):
             dataY.append(1)
 
     return numpy.array(dataX), numpy.array(dataY)
+
+  def set_look_back(self, value):
+    self.look_back = value
 
   def create_data_for_fit(self, dataset, train_proportion=0.66, mean_of=0):
     """
@@ -74,9 +77,7 @@ class DenseLSTM(NeuralNetwork):
 
     train_size = int(len(dataset) * train_proportion)
     test_size = len(dataset) - train_size
-    train, test = dataset[0:train_size], dataset[train_size:len(dataset)]
-
-    trainX, testX = dataX[0:train_size,:], dataX[train_size:len(dataX):]
+    trainX, testX = dataX[0:train_size,:], dataX[train_size:len(dataX),:]
     trainY, testY = dataY[0:train_size], dataY[train_size:len(dataX)]
 
     trainX = numpy.reshape(trainX, (trainX.shape[0], self.look_back, trainX.shape[2]))

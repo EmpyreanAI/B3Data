@@ -14,7 +14,7 @@ class NeuralNetwork(object):
     self.model.fit(self.trainX, self.trainY, epochs, verbose=0, validation_split=0.33)
     score, acc = self.model.evaluate(self.testX, self.testY, verbose=0)
     self.log('Test accuracy:' + str(acc))
-    return {'loss': -acc, 'status': STATUS_OK, 'model': self.model}
+    return {'acc': acc, 'status': STATUS_OK, 'model': self.model}
 
   @staticmethod
   def log(message):
