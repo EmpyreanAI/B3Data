@@ -11,7 +11,7 @@ VOLUME = 'VOLTOT'
 
 class Stocks(object):
 
-  def __init__(self, cod='PETR3', year=2014, start_month=1, period=11):
+  def __init__(self, cod='PETR3', year=2014, start_month=1, period=0):
     path = "../BovespaWolf/data/COTAHIST_A" + str(year) + ".TXT.csv"
     files = glob.glob(path)
 
@@ -29,12 +29,11 @@ class Stocks(object):
       else:
         next_month = start_month + period
 
-      first_date = str(year) + '-' + str(start_month) + '-01'
-      last_date = str(year) + '-' + str(next_month) + '-30'
-
+      first_date = str(year) + '-0' + str(start_month) + '-01'
+      last_date = str(year) + '-0' + str(next_month) + '-30'
       stocks = filtered.loc[(filtered['DATA'] > first_date) &
                  (filtered['DATA'] <= last_date)]
-
+                 
       self.quotations = stocks
 
   def selected_fields(self, fields=[CLOSING]):
