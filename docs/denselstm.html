@@ -59,7 +59,7 @@ class DenseLSTM(NeuralNetwork):
 
     return model
 
-  def __create_label(self, dataset, mean_of=0):
+  def _create_label(self, dataset, mean_of=0):
     dataX, dataY = [], []
 
     scaler = MinMaxScaler(feature_range=(0, 1))
@@ -94,7 +94,7 @@ class DenseLSTM(NeuralNetwork):
       interval decided by look_back parameter in DenseLSTM. So label[0] will be
       the value of mean(feature_1[0], ... , feature_1[look_back])
     &#34;&#34;&#34;
-    dataX, dataY = self.__create_label(dataset)
+    dataX, dataY = self._create_label(dataset)
 
     train_size = int(len(dataset) * train_proportion)
     test_size = len(dataset) - train_size
@@ -155,7 +155,7 @@ LSTM cells or a single LSTM cell without Dense Layer.</p></section>
 
     return model
 
-  def __create_label(self, dataset, mean_of=0):
+  def _create_label(self, dataset, mean_of=0):
     dataX, dataY = [], []
 
     scaler = MinMaxScaler(feature_range=(0, 1))
@@ -190,7 +190,7 @@ LSTM cells or a single LSTM cell without Dense Layer.</p></section>
       interval decided by look_back parameter in DenseLSTM. So label[0] will be
       the value of mean(feature_1[0], ... , feature_1[look_back])
     &#34;&#34;&#34;
-    dataX, dataY = self.__create_label(dataset)
+    dataX, dataY = self._create_label(dataset)
 
     train_size = int(len(dataset) * train_proportion)
     test_size = len(dataset) - train_size
@@ -255,7 +255,7 @@ the value of mean(feature_1[0], &hellip; , feature_1[look_back])</p></section>
     interval decided by look_back parameter in DenseLSTM. So label[0] will be
     the value of mean(feature_1[0], ... , feature_1[look_back])
   &#34;&#34;&#34;
-  dataX, dataY = self.__create_label(dataset)
+  dataX, dataY = self._create_label(dataset)
 
   train_size = int(len(dataset) * train_proportion)
   test_size = len(dataset) - train_size

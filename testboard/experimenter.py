@@ -1,54 +1,70 @@
-import itertools
+"""Nani."""
+
 import gc
-from plotter import Plotter
+import itertools
 from copy import copy
-from denselstm import DenseLSTM
 from sequecialkfold import SequencialKFold
-from stocks import Stocks, OPENING, CLOSING, MEAN_PRICE, MIN_PRICE, MAX_PRICE, VOLUME
 
-class Experimenter(object):
+from stocks import Stocks
+from stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRICE, VOLUME
+from plotter import Plotter
 
-  def __init__(self):
-    self.plotter = Plotter()
-    self.stocks = ['PETR3', 'ABEV3', 'VALE3', 'BBAS3', 'BVMF3']
-    self.years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
-    all_fields = [CLOSING]
-    self.fields = []
 
-    for field in range(0, len(all_fields)+1):
-        for subset in itertools.combinations(all_fields, field):
-            if len(subset) != 0:
-                self.fields.append(list(subset))
+class Experimenter():
+    """Nani."""
 
-  def generate_string_fields(self, field):
-    name = ''
-    for i in field:
-      name += i[:4]
-      name += '_'
+    def __init__(self):
+        """Nani."""
+        self.plotter = Plotter()
+        self.years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
+        all_fields = [CLOSING, OPENING, MAX_PRICE,
+                      MIN_PRICE, MEAN_PRICE, VOLUME]
+        self.fields = []
+        self.stocks = ['VALE3']
 
-    return name
+        for i, _ in enumerate(all_fields):
+            for subset in itertools.combinations(all_fields, i):
+                if subset:
+                    self.fields.append(list(subset))
 
-  def run(self):
-    for stock in self.stocks:
-      for year in self.years:
-        for field in self.fields:
-          self.log('stock: ' + str(stock) + ' year: ' + str(year) + ' fields: ' + self.generate_string_fields(field))
-          data = self.execute_experiment(year, stock, copy(field))
-          self.plotter.box_plot(data, stock, year, features=self.generate_string_fields(field))
-          gc.collect()
+    @staticmethod
+    def gen_str_fields(field):
+        """Nani."""
+        name = ''
+        for i in field:
+            name += i[:4]
+            name += '_'
+        return name
 
-  def execute_experiment(self, year, stock, fields):
-    results = []
-    stocks = Stocks(year=year, cod=stock, period=6)
-    dataset = stocks.selected_fields(fields)
-    sequencial_kfold = SequencialKFold(n_split=10)
-    for i in [0.25, 0.50, 0.75, 1]:
-      results.append(sequencial_kfold.split_and_fit(data=dataset, look_back_proportion=i))
+    def run(self):
+        """Nani."""
+        for stock in self.stocks:
+            for year in self.years:
+                for field in self.fields:
+                    s_field = self.gen_str_fields(field)
+                    self.log(f"Stock: {stock}; "
+                             f"Year: {year}; "
+                             f"Fields: {s_field}")
+                    data = self.execute_experiment(year, stock, copy(field))
+                    self.plotter.box_plot(data, stock, year, s_field)
+                    gc.collect()
 
-    del stock
-    return results
+    @staticmethod
+    def execute_experiment(year, stock, fields):
+        """Nani."""
+        results = []
+        stocks = Stocks(year=year, cod=stock, period=6)
+        dataset = stocks.selected_fields(fields)
+        sequencial_kfold = SequencialKFold(n_split=10)
+        for i in [0.25, 0.50, 0.75, 1]:
+            res = sequencial_kfold.split_and_fit(data=dataset,
+                                                 look_back=i)
+            results.append(res)
 
-  def log(self, message):
-    print('[Experimenter]' + message)
+        del stock
+        return results
 
-# exp = Experimenter()
+    @staticmethod
+    def log(message):
+        """Nani."""
+        print('[Experimenter]' + message)

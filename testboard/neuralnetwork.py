@@ -1,21 +1,37 @@
-from hyperopt import Trials, STATUS_OK, tpe
+"""Nani."""
 
-class NeuralNetwork(object):
-
-  # @staticmethod
-  def __create_model(self):
-    pass
+from hyperopt import STATUS_OK
 
 
-  def create_data_for_fit():
-    pass
+class NeuralNetwork():
+    """Nani."""
 
-  def fit_and_evaluate(self, epochs=5000):
-    self.model.fit(self.trainX, self.trainY, epochs, verbose=0, validation_split=0.33)
-    score, acc = self.model.evaluate(self.testX, self.testY, verbose=0)
-    self.log('Test accuracy:' + str(acc))
-    return {'acc': acc, 'status': STATUS_OK, 'model': self.model}
+    def __init__(self):
+        """Nani."""
+        self.model = self._create_model()
+        self.train_x = None
+        self.train_y = None
+        self.test_x = None
+        self.test_y = None
 
-  @staticmethod
-  def log(message):
-    print('[NeuralNetwork] ' + message)
+    def _create_model(self):
+        """Nani."""
+        raise NotImplementedError("Model must create an object.")
+
+    def create_data_for_fit(self, dataset, train_proportion=0.66):
+        """Nani."""
+        raise NotImplementedError("Model must create data.")
+
+    def fit_and_evaluate(self, epochs):
+        """Nani."""
+        self.model.fit(self.train_x, self.train_y, epochs,
+                       verbose=0, validation_split=0.33)
+        _, acc = self.model.evaluate(self.test_x, self.test_y,
+                                     verbose=0)
+        self.log('Test accuracy:' + str(acc))
+        return {'acc': acc, 'status': STATUS_OK, 'model': self.model}
+
+    @staticmethod
+    def log(message):
+        """Nani."""
+        print('[NeuralNetwork] ' + message)

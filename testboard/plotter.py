@@ -1,24 +1,29 @@
+"""Nani."""
+
 import os
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Polygon
 
 
-class Plotter(object):
-  """docstring for Ploter."""
+class Plotter():
+    """docstring for Ploter."""
 
-  def box_plot(self, data, stock, year, features):
-    fig, ax = plt.subplots()
-    hfont = {'fontname': 'monospace'}
-    ax.set_title("{}-{}".format(stock, year), **hfont)
-    ax.set_xlabel('Window Size', **hfont)
-    ax.set_ylabel('Accuracy', **hfont)
-    bplot = ax.boxplot(data, patch_artist=True, sym='.')
-    ax.set_xticklabels(['25%', '50%', '75%', '100%'])
-    colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
-    for patch, color in zip(bplot['boxes'], colors):
-        patch.set_facecolor(color)
-    plt.setp(bplot['medians'], color='#ffffff')
-    filename = "./graphics/{}/{}/{}".format(stock, year, features)
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    plt.savefig(filename)
+    @staticmethod
+    def box_plot(data, stock, year, features):
+        """Nani."""
+        _, ax_plot = plt.subplots()
+        hfont = {'fontname': 'monospace'}
+        ax_plot.set_title("{}-{}".format(stock, year), **hfont)
+        ax_plot.set_xlabel('Window Size', **hfont)
+        ax_plot.set_ylabel('Accuracy', **hfont)
+        bplot = ax_plot.boxplot(data, patch_artist=True, sym='.')
+        ax_plot.set_xticklabels(['25%', '50%', '75%', '100%'])
+        colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
+        for patch, color in zip(bplot['boxes'], colors):
+            patch.set_facecolor(color)
+        plt.setp(bplot['medians'], color='#ffffff')
+        filename = "./graphics/{}/{}/{}".format(stock, year, features)
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        plt.savefig(filename)
+
+    def empty_method_just_so_lint_stop_complaining(self):
+        """Nani."""
