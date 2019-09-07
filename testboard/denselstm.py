@@ -15,7 +15,7 @@ class DenseLSTM(NeuralNetwork):
     without Dense Layer.
     """
 
-    def __init__(self, look_back=12, dense=False, lstm_cells=1, input_shape=1):
+    def __init__(self, look_back=12, dense=True, lstm_cells=20, input_shape=1):
         """Nani."""
         self.look_back = look_back
         self.dense = dense
@@ -75,11 +75,10 @@ class DenseLSTM(NeuralNetwork):
 
         """
         data_x, data_y = self._create_label(dataset)
-
         train_size = int(len(dataset) * train_proportion)
-        train_x = data_x[0:train_size, :]
 
-        test_x = data_x[train_size:len(data_x), :]
+        train_x = data_x[0:train_size]
+        test_x = data_x[train_size:len(data_x)]
         train_y = data_y[0:train_size]
         test_y = data_y[train_size:len(data_x)]
 

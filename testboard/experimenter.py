@@ -16,7 +16,7 @@ class Experimenter():
     def __init__(self):
         """Nani."""
         self.plotter = Plotter()
-        self.years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
+        self.years = [2014, 2015, 2016, 2017]
         all_fields = [CLOSING, OPENING, MAX_PRICE,
                       MIN_PRICE, MEAN_PRICE, VOLUME]
         self.fields = []
@@ -53,7 +53,7 @@ class Experimenter():
     def execute_experiment(year, stock, fields):
         """Nani."""
         results = []
-        stocks = Stocks(year=year, cod=stock, period=6)
+        stocks = Stocks(year=year, cod=stock, period=11)
         dataset = stocks.selected_fields(fields)
         sequencial_kfold = SequencialKFold(n_split=10)
         for i in [0.25, 0.50, 0.75, 1]:
@@ -61,10 +61,10 @@ class Experimenter():
                                                  look_back=i)
             results.append(res)
 
-        del stock
+        # del stock
         return results
 
     @staticmethod
     def log(message):
         """Nani."""
-        print('[Experimenter]' + message)
+        print('[Experimenter] ' + message)

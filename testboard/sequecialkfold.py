@@ -1,6 +1,7 @@
 """Nani."""
 
 from denselstm import DenseLSTM
+from keras import backend as K
 
 
 class SequencialKFold():
@@ -23,18 +24,18 @@ class SequencialKFold():
             for i in range(1, self.n_split+1):
                 data_splited = data[:jump_size*i, :]
 
-            # PRECISA REFATORAR
-                look_back = (len(data_splited)*0.3)*look_back
-                self.log('LOOK_BACK = ' + str(int(look_back)))
+                new_look_back = (len(data_splited)*0.3)*look_back
+                self.log('LOOK_BACK = ' + str(int(new_look_back)))
                 self.log('Data_Size = ' + str(int(len(data_splited))))
-                self.log('PROPORTION = ' + str(look_back))
+                self.log('PROPORTION = ' + str(new_look_back))
                 self.log('DATA_SHAPE = ' + str(data_splited.shape))
                 del model
                 model = DenseLSTM(input_shape=data_splited.shape[1],
-                                  look_back=int(look_back))
+                                  look_back=int(new_look_back))
                 model.create_data_for_fit(data_splited)
                 result = model.fit_and_evaluate(epochs=epochs)
                 acc_list.append(result['acc'])
+                K.clear_session()
 
         return acc_list
 
