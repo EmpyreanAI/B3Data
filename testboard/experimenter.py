@@ -42,9 +42,8 @@ class Experimenter():
             for year in self.years:
                 for field in self.fields:
                     s_field = self.gen_str_fields(field)
-                    self.log(f"Stock: {stock}; "
-                             f"Year: {year}; "
-                             f"Fields: {s_field}")
+                    self.log("Stock: %s; Year: %s; Fields: %s"
+                              % (stock, str(year), s_field))
                     data = self.execute_experiment(year, stock, copy(field))
                     self.plotter.box_plot(data, stock, year, s_field)
                     gc.collect()
@@ -61,7 +60,6 @@ class Experimenter():
                                                  look_back=i)
             results.append(res)
 
-        # del stock
         return results
 
     @staticmethod
