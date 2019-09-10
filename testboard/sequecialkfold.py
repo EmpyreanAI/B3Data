@@ -1,6 +1,7 @@
 """Nani."""
 
 from denselstm import DenseLSTM
+from densegru import DenseGRU
 from keras import backend as K
 
 
