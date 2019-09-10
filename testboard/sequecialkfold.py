@@ -12,6 +12,7 @@ class SequencialKFold():
         """Nani."""
         self.n_split = n_split
 
+    # Tem que refatorar ainda
     def split_and_fit(self, data=None, epochs=10000, look_back=0.25):
         """Nani."""
         acc_list = []
