@@ -75,7 +75,7 @@ class DenseLSTM(NeuralNetwork):
 
         """
         data_x, data_y = self._create_label(dataset)
-
+        print(data_x, data_y)
         train_size = int(len(dataset) * train_proportion)
         train_x = data_x[0:train_size, :]
 
