@@ -20,12 +20,13 @@ class Experimenter():
         all_fields = [CLOSING, OPENING, MAX_PRICE,
                       MIN_PRICE, MEAN_PRICE, VOLUME]
         self.fields = []
-        self.stocks = ['VALE3']
+        self.stocks = ['VALE3', 'PETR3', 'ABEV3']
 
         for i, _ in enumerate(all_fields):
             for subset in itertools.combinations(all_fields, i):
                 if subset:
                     self.fields.append(list(subset))
+        # self.fields = [[OPENING, VOLUME]]
 
     @staticmethod
     def gen_str_fields(field):

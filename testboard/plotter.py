@@ -24,6 +24,7 @@ class Plotter():
         filename = "./graphics/{}/{}/{}".format(stock, year, features)
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         plt.savefig(filename)
+        plt.close('all')
 
     def empty_method_just_so_lint_stop_complaining(self):
         """Nani."""

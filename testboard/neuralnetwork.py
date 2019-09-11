@@ -24,11 +24,12 @@ class NeuralNetwork():
 
     def fit_and_evaluate(self, epochs):
         """Nani."""
-        self.model.fit(self.train_x, self.train_y, epochs,
+        self.model.fit(self.train_x, self.train_y, batch_size=256, epochs=epochs,
                        verbose=0, validation_split=0.33)
-        _, acc = self.model.evaluate(self.test_x, self.test_y,
+        loss, acc = self.model.evaluate(self.test_x, self.test_y, batch_size=256,
                                      verbose=0)
-        self.log('Test accuracy:' + str(acc))
+        self.log('Test Loss:' + str(loss))
+        self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'status': STATUS_OK, 'model': self.model}
 
     @staticmethod
