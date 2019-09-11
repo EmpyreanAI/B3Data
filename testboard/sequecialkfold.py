@@ -1,6 +1,8 @@
 """Nani."""
 
 from denselstm import DenseLSTM
+from densegru import DenseGRU
+from keras import backend as K
 
 
 class SequencialKFold():
@@ -10,6 +12,7 @@ class SequencialKFold():
         """Nani."""
         self.n_split = n_split
 
+    # Tem que refatorar ainda
     def split_and_fit(self, data=None, epochs=10000, look_back=0.25):
         """Nani."""
         acc_list = []
@@ -23,9 +26,8 @@ class SequencialKFold():
             for i in range(1, self.n_split+1):
                 data_splited = data[:jump_size*i, :]
 
-            # PRECISA REFATORAR
                 new_look_back = (len(data_splited)*0.3)*look_back
-                self.log('LOOK_BACK = ' + str(int(look_back)))
+                self.log('LOOK_BACK = ' + str(int(new_look_back)))
                 self.log('Data_Size = ' + str(int(len(data_splited))))
                 self.log('PROPORTION = ' + str(new_look_back))
                 self.log('DATA_SHAPE = ' + str(data_splited.shape))
@@ -35,6 +37,7 @@ class SequencialKFold():
                 model.create_data_for_fit(data_splited)
                 result = model.fit_and_evaluate(epochs=epochs)
                 acc_list.append(result['acc'])
+                K.clear_session()
 
         return acc_list
 

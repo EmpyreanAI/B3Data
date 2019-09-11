@@ -35,8 +35,8 @@ class Stocks():
             else:
                 next_month = start_month + period
 
-            first_date = str(year) + '-0' + str(start_month) + '-01'
-            last_date = str(year) + '-0' + str(next_month) + '-30'
+            first_date = str(year) + '-' + str(start_month) + '-01'
+            last_date = str(year) + '-' + str(next_month) + '-30'
             data_start = (filtered['DATA'] > first_date)
             data_end = (filtered['DATA'] <= last_date)
             stocks = filtered.loc[data_start & data_end]

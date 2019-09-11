@@ -8,11 +8,11 @@ class NeuralNetwork():
 
     def __init__(self):
         """Nani."""
+        self.train_x = []
+        self.train_y = []
+        self.test_x = []
+        self.test_y = []
         self.model = self._create_model()
-        self.train_x = None
-        self.train_y = None
-        self.test_x = None
-        self.test_y = None
 
     def _create_model(self):
         """Nani."""
