@@ -2,7 +2,7 @@
 
 import numpy
 from keras.models import Sequential
-from keras.layers import LSTM, Dense
+from keras.layers import LSTM, Dense, Dropout
 from sklearn.preprocessing import MinMaxScaler
 
 from neuralnetwork import NeuralNetwork
@@ -15,7 +15,7 @@ class DenseLSTM(NeuralNetwork):
     without Dense Layer.
     """
 
-    def __init__(self, look_back=12, dense=True, lstm_cells=20, input_shape=1):
+    def __init__(self, look_back=12, dense=True, lstm_cells=42, input_shape=1):
         """Nani."""
         self.look_back = look_back
         self.dense = dense
@@ -27,13 +27,22 @@ class DenseLSTM(NeuralNetwork):
         """Nani."""
         model = Sequential()
         lstm_cells = 1 if not self.dense else self.lstm_cells
+
+        model.add(Dropout(rate=0.41))
         model.add(LSTM(lstm_cells, input_shape=(self.input_shape,
                                                 self.look_back)))
+
         if self.dense:
             model.add(Dense(1))
+
+
+        # model.add(Dense(1))
+
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
-                      metrics=['acc'])
+                      metrics=['accuracy'])
+
+        # print(model.summary())
 
         return model
 
