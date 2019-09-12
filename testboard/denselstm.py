@@ -15,7 +15,7 @@ class DenseLSTM(NeuralNetwork):
     without Dense Layer.
     """
 
-    def __init__(self, look_back=12, dense=True, lstm_cells=42, input_shape=1):
+    def __init__(self, look_back=12, dense=False, lstm_cells=1, input_shape=1):
         """Nani."""
         self.look_back = look_back
         self.dense = dense
