@@ -17,16 +17,17 @@ class Experimenter():
         """Nani."""
         self.plotter = Plotter()
         self.years = [2014, 2015, 2016, 2017]
-        all_fields = [CLOSING, OPENING, MAX_PRICE,
-                      MIN_PRICE, MEAN_PRICE, VOLUME]
-        self.fields = []
+        # all_fields = [CLOSING, OPENING, MAX_PRICE,
+                      # MIN_PRICE, MEAN_PRICE, VOLUME]
+        # self.fields = []
         self.stocks = ['VALE3', 'PETR3', 'ABEV3']
 
-        for i, _ in enumerate(all_fields):
-            for subset in itertools.combinations(all_fields, i):
-                if subset:
-                    self.fields.append(list(subset))
-        # self.fields = [[OPENING, VOLUME]]
+        # for i, _ in enumerate(all_fields):
+        #     for subset in itertools.combinations(all_fields, i):
+        #         if subset:
+        #             self.fields.append(list(subset))
+        self.fields = [[CLOSING], [OPENING], [MAX_PRICE],
+                      [MIN_PRICE], [MEAN_PRICE], [VOLUME]]
 
     @staticmethod
     def gen_str_fields(field):
