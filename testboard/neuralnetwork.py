@@ -28,11 +28,12 @@ class NeuralNetwork():
         """Nani."""
         history = LossHistory()
         self.model.fit(self.train_x, self.train_y, batch_size=256,
-                       epochs=epochs, verbose=0, callbacks=[history],
-                       validation_split=0.33)
+                       epochs=epochs, verbose=1, callbacks=[history])
 
-        loss, acc = self.model.evaluate(self.test_x, self.test_y, batch_size=256,
-                                     verbose=0)
+                    #validation_split=0.33
+
+        loss, acc = self.model.evaluate(self.test_x, self.test_y,
+                                        batch_size=256, verbose=0)
         Plotter.loss_epoch_plot(history.losses)
         self.log('Test Loss:' + str(loss))
         self.log('Test Accuracy:' + str(acc))
