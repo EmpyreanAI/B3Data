@@ -8,6 +8,7 @@ from sequecialkfold import SequencialKFold
 from stocks import Stocks
 from stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRICE, VOLUME
 from plotter import Plotter
+from smote import duplicate_data
 
 
 class Experimenter():
@@ -17,10 +18,12 @@ class Experimenter():
         """Nani."""
         self.plotter = Plotter()
         self.years = [2014, 2015, 2016, 2017]
+        # self.years = [2017]
         # all_fields = [CLOSING, OPENING, MAX_PRICE,
                       # MIN_PRICE, MEAN_PRICE, VOLUME]
         # self.fields = []
-        self.stocks = ['VALE3', 'PETR3', 'ABEV3']
+        # self.stocks = ['VALE3', 'PETR3', 'ABEV3']
+        self.stocks = ['PETR3', 'ABEV3']
 
         # for i, _ in enumerate(all_fields):
         #     for subset in itertools.combinations(all_fields, i):
@@ -34,7 +37,7 @@ class Experimenter():
         """Nani."""
         name = ''
         for i in field:
-            name += i[:4]
+            name += i[:-1]
             name += '_'
         return name
 
@@ -54,8 +57,9 @@ class Experimenter():
     def execute_experiment(year, stock, fields):
         """Nani."""
         results = []
-        stocks = Stocks(year=year, cod=stock, period=11)
+        stocks = Stocks(year=year, cod=stock, period=6)
         dataset = stocks.selected_fields(fields)
+        dataset = duplicate_data(dataset)
         sequencial_kfold = SequencialKFold(n_split=10)
         for i in [0.25, 0.50, 0.75, 1]:
             res = sequencial_kfold.split_and_fit(data=dataset,
