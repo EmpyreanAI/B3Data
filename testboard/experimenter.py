@@ -37,7 +37,7 @@ class Experimenter():
         """Nani."""
         name = ''
         for i in field:
-            name += i[:-1]
+            name += i[:5]
             name += '_'
         return name
 
