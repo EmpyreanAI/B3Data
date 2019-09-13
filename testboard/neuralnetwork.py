@@ -1,6 +1,8 @@
 """Nani."""
 
 from hyperopt import STATUS_OK
+from callbacks import LossHistory
+from plotter import Plotter
 
 
 class NeuralNetwork():
@@ -24,10 +26,14 @@ class NeuralNetwork():
 
     def fit_and_evaluate(self, epochs):
         """Nani."""
-        self.model.fit(self.train_x, self.train_y, batch_size=256, epochs=epochs,
-                       verbose=0, validation_split=0.33)
+        history = LossHistory()
+        self.model.fit(self.train_x, self.train_y, batch_size=256,
+                       epochs=epochs, verbose=0, callbacks=[history],
+                       validation_split=0.33)
+
         loss, acc = self.model.evaluate(self.test_x, self.test_y, batch_size=256,
                                      verbose=0)
+        Plotter.loss_epoch_plot(history.losses)
         self.log('Test Loss:' + str(loss))
         self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'status': STATUS_OK, 'model': self.model}

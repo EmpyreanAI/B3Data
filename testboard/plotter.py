@@ -26,5 +26,17 @@ class Plotter():
         plt.savefig(filename)
         plt.close('all')
 
-    def empty_method_just_so_lint_stop_complaining(self):
-        """Nani."""
+    @staticmethod
+    def loss_epoch_plot(loss):
+        _, ax_plot = plt.subplots()
+        hfont = {'fontname': 'monospace'}
+        # ax_plot.set_title("{}-{}".format(stock, year), **hfont)
+        ax_plot.set_xlabel('Epoch', **hfont)
+        ax_plot.set_ylabel('Loss', **hfont)
+        ax_plot.plot(loss)
+        plt.show()
+
+        # filename = "./graphics/{}/{}/{}".format(stock, year, features)
+        # os.makedirs(os.path.dirname(filename), exist_ok=True)
+        # plt.savefig(filename)
+        # plt.close('all')
