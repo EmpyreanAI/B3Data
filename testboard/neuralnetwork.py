@@ -26,15 +26,13 @@ class NeuralNetwork():
 
     def fit_and_evaluate(self, epochs):
         """Nani."""
-        history = LossHistory()
+        history_train = LossHistory()
         self.model.fit(self.train_x, self.train_y, batch_size=256,
-                       epochs=epochs, verbose=1, callbacks=[history])
-
-                    #validation_split=0.33
+                       epochs=epochs, verbose=1, callbacks=[history_train])
 
         loss, acc = self.model.evaluate(self.test_x, self.test_y,
                                         batch_size=256, verbose=0)
-        Plotter.loss_epoch_plot(history.losses)
+        Plotter.loss_epoch_plot(history_train.losses)
         self.log('Test Loss:' + str(loss))
         self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'status': STATUS_OK, 'model': self.model}
