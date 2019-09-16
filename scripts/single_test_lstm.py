@@ -14,10 +14,10 @@ space = {
     'batch_size': hp.choice('batch_size', [1, 2, 64, 128, 256, 512]),
     'cells': hp.choice('cells', [1, 2, 16, 20, 50, 80, 100]),
     'look_back_proportion': hp.choice('look_back_proportion', [25, 50, 75, 100]),
-    'nb_epochs' :  10000,
+    'nb_epochs' :  5000,
 }
 
-stocks = Stocks(year=2015, cod='PETR3', period=11)
+stocks = Stocks(year=2015, cod='VALE3', period=11)
 dataset = stocks.selected_fields([CLOSING])
 
 def label(dataset, look_back_proportion, mean_of=0):
@@ -64,7 +64,7 @@ def objective(params):
     train_x, train_y, test_x, test_y, look_back = create_data_set(look_back_proportion=params['look_back_proportion'])
 
     model = Sequential()
-    model.add(LSTM(1, input_shape=(1, look_back),
+    model.add(LSTM(params['cells'], input_shape=(1, look_back),
                       recurrent_dropout=params['recurrent_dropout']))
     model.add(Dense(1))
     model.compile(loss='binary_crossentropy',
@@ -82,7 +82,7 @@ def objective(params):
 
 trials = Trials()
 
-best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=1)
+best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=10)
 
 print (best)
 print (trials.best_trial)

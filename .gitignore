@@ -3,6 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=python
 
 graphics/
+.DS_Store
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
