@@ -48,25 +48,33 @@ class Experimenter():
                 for field in self.fields:
                     s_field = self.gen_str_fields(field)
                     self.log("Stock: %s; Year: %s; Fields: %s"
-                              % (stock, str(year), s_field))
-                    data = self.execute_experiment(year, stock, copy(field))
-                    self.plotter.box_plot(data, stock, year, s_field)
+                             % (stock, str(year), s_field))
+                    data_acc, data_loss = self.execute_experiment(year,
+                                                                  stock,
+                                                                  copy(field))
+                    # self.plotter.acc_box_plot(data_acc, stock, year, s_field)
+                    # self.plotter.loss_epoch_plot(data_loss, stock, year)
+                    self.plotter.loss_acc_plot(data_acc, data_loss,
+                                            stock, year, s_field)
                     gc.collect()
 
     @staticmethod
     def execute_experiment(year, stock, fields):
         """Nani."""
-        results = []
+        results_acc = []
+        results_loss = []
+
         stocks = Stocks(year=year, cod=stock, period=6)
         dataset = stocks.selected_fields(fields)
         dataset = duplicate_data(dataset)
         sequencial_kfold = SequencialKFold(n_split=10)
         for i in [0.25, 0.50, 0.75, 1]:
-            res = sequencial_kfold.split_and_fit(data=dataset,
-                                                 look_back=i)
-            results.append(res)
+            acc, loss = sequencial_kfold.split_and_fit(data=dataset,
+                                                       look_back=i)
+            results_acc.append(acc)
+            results_loss.append(loss)
 
-        return results
+        return results_acc, results_loss
 
     @staticmethod
     def log(message):

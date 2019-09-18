@@ -34,7 +34,6 @@ class DenseLSTM(NeuralNetwork):
                        input_shape=(self.input_shape, self.look_back),
                        bias_initializer='random_normal'))
 
-
         if self.dense:
             model.add(Dense(activation="linear", units=1))
             # model.add(Dense(1))

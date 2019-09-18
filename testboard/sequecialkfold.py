@@ -1,6 +1,7 @@
 """Nani."""
 
 from denselstm import DenseLSTM
+import numpy as np
 from densegru import DenseGRU
 from keras import backend as K
 
@@ -16,6 +17,7 @@ class SequencialKFold():
     def split_and_fit(self, data=None, epochs=5000, look_back=0.25):
         """Nani."""
         acc_list = []
+        loss_list = []
 
         if data is None:
             self.log("data paramater can't be None")
@@ -37,9 +39,12 @@ class SequencialKFold():
                 model.create_data_for_fit(data_splited)
                 result = model.fit_and_evaluate(epochs=epochs)
                 acc_list.append(result['acc'])
+                loss_list.append(result['loss'])
                 K.clear_session()
 
-        return acc_list
+            mean_list = np.mean(loss_list, axis=0)
+
+        return acc_list, mean_list
 
     @staticmethod
     def log(message):
