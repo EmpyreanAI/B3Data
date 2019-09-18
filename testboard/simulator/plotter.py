@@ -29,6 +29,7 @@ class Plotter():
 
     @staticmethod
     def loss_epoch_plot(cls, loss_train, stock, year):
+        """Nani."""
         fig, ax_plot = plt.subplots()
         hfont = {'fontname': 'monospace'}
         colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
@@ -42,7 +43,8 @@ class Plotter():
 
     @staticmethod
     def loss_acc_plot(acc, loss, stock, year, features):
-        fig1, ax1 = plt.subplots() #figsize=(20, 10)
+        """Nani."""
+        fig1, ax1 = plt.subplots()  # figsize=(20, 10)
         hfont = {'fontname': 'monospace'}
         colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
         ax1.set_title("{}-{}".format(stock, year), **hfont)

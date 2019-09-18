@@ -1,14 +1,13 @@
 """Nani."""
 
 import gc
-import itertools
 from copy import copy
-from sequecialkfold import SequencialKFold
 
-from stocks import Stocks
-from stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRICE, VOLUME
-from plotter import Plotter
-from smote import duplicate_data
+from validators.sequecialkfold import SequencialKFold
+from data_mining.stocks import Stocks, CLOSING, OPENING, MAX_PRICE
+from data_mining.stocks import MIN_PRICE, MEAN_PRICE, VOLUME
+from simulator.plotter import Plotter
+from data_mining.smote import duplicate_data
 
 
 class Experimenter():
@@ -20,7 +19,7 @@ class Experimenter():
         self.years = [2014, 2015, 2016, 2017]
         # self.years = [2017]
         # all_fields = [CLOSING, OPENING, MAX_PRICE,
-                      # MIN_PRICE, MEAN_PRICE, VOLUME]
+        #               MIN_PRICE, MEAN_PRICE, VOLUME]
         # self.fields = []
         # self.stocks = ['VALE3', 'PETR3', 'ABEV3']
         self.stocks = ['PETR3', 'ABEV3']
@@ -30,7 +29,7 @@ class Experimenter():
         #         if subset:
         #             self.fields.append(list(subset))
         self.fields = [[CLOSING], [OPENING], [MAX_PRICE],
-                      [MIN_PRICE], [MEAN_PRICE], [VOLUME]]
+                       [MIN_PRICE], [MEAN_PRICE], [VOLUME]]
 
     @staticmethod
     def gen_str_fields(field):
@@ -55,7 +54,7 @@ class Experimenter():
                     # self.plotter.acc_box_plot(data_acc, stock, year, s_field)
                     # self.plotter.loss_epoch_plot(data_loss, stock, year)
                     self.plotter.loss_acc_plot(data_acc, data_loss,
-                                            stock, year, s_field)
+                                               stock, year, s_field)
                     gc.collect()
 
     @staticmethod

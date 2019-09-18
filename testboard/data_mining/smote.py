@@ -1,6 +1,10 @@
+"""Nani."""
+
 import numpy
 
+
 def duplicate_data(dataset):
+    """Nani."""
     res = []
     for i in range(len(dataset)-1):
         res.append(dataset[i])

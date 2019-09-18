@@ -1,41 +1,21 @@
 """Nani."""
 
 import numpy
-from keras.models import Sequential
-from keras.layers import GRU, Dense
+from hyperopt import STATUS_OK
 from sklearn.preprocessing import MinMaxScaler
+from models.helpers.callbacks import LossHistory
 
-from neuralnetwork import NeuralNetwork
 
+class NeuralNetwork():
+    """Nani."""
 
-class DenseGRU(NeuralNetwork):
-    """Class responsible for create keras LSTM.
-
-    It can be Dense with several LSTM cells or a single LSTM cell
-    without Dense Layer.
-    """
-
-    def __init__(self, look_back=12, dense=True, gru_cells=1000, input_shape=1):
+    def __init__(self):
         """Nani."""
-        self.look_back = look_back
-        self.dense = dense
-        self.gru_cells = gru_cells
-        self.input_shape = input_shape
-        super(DenseGRU, self).__init__()
-
-    def _create_model(self):
-        """Nani."""
-        model = Sequential()
-        gru_cells = 1 if not self.dense else self.gru_cells
-        model.add(GRU(gru_cells, input_shape=(self.input_shape,
-                                              self.look_back)))
-        if self.dense:
-            model.add(Dense(1))
-        model.compile(loss='binary_crossentropy',
-                      optimizer='adam',
-                      metrics=['acc'])
-
-        return model
+        self.train_x = []
+        self.train_y = []
+        self.test_x = []
+        self.test_y = []
+        self.model = self._create_model()
 
     def _create_label(self, dataset, mean_of=0):
         """Nani."""
@@ -63,7 +43,7 @@ class DenseGRU(NeuralNetwork):
         """Create the labels and reshape data for fit.
 
         Create the labels and reshape data according to parameters of
-        DenseGRU(look_back, input_shape).
+        DenseLSTM(look_back, input_shape).
 
         Parameters
         ----------
@@ -93,3 +73,21 @@ class DenseGRU(NeuralNetwork):
         self.train_y = train_y
         self.test_x = test_x
         self.test_y = test_y
+
+    def fit_and_evaluate(self, epochs):
+        """Nani."""
+        history_train = LossHistory()
+        self.model.fit(self.train_x, self.train_y, batch_size=256,
+                       epochs=epochs, verbose=1, callbacks=[history_train])
+
+        loss, acc = self.model.evaluate(self.test_x, self.test_y,
+                                        batch_size=256, verbose=0)
+        self.log('Test Loss:' + str(loss))
+        self.log('Test Accuracy:' + str(acc))
+        return {'acc': acc, 'loss': history_train.losses,
+                'status': STATUS_OK, 'model': self.model}
+
+    @staticmethod
+    def log(message):
+        """Nani."""
+        print('[NeuralNetwork] ' + message)
