@@ -2,11 +2,10 @@
 
 import numpy
 from keras.models import Sequential
-from keras.layers import LSTM, Dense, Dropout
-from keras.optimizers import Adam
+from keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 
-from neuralnetwork import NeuralNetwork
+from .neuralnetwork import NeuralNetwork
 
 
 class DenseLSTM(NeuralNetwork):
@@ -16,7 +15,8 @@ class DenseLSTM(NeuralNetwork):
     without Dense Layer.
     """
 
-    def __init__(self, look_back=12, dense=True, lstm_cells=100, input_shape=1):
+    def __init__(self, look_back=12, dense=True,
+                 lstm_cells=100, input_shape=1):
         """Nani."""
         self.look_back = look_back
         self.dense = dense

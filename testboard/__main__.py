@@ -1,6 +1,6 @@
 """Nani."""
 
-from experimenter import Experimenter
+from simulator.experimenter import Experimenter
 import tensorflow as tf
 tf.logging.set_verbosity(tf.logging.ERROR)
 

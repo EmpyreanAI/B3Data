@@ -1,8 +1,7 @@
 """Nani."""
 
 from hyperopt import STATUS_OK
-from callbacks import LossHistory
-from plotter import Plotter
+from models.helpers.callbacks import LossHistory
 
 
 class NeuralNetwork():
@@ -32,7 +31,6 @@ class NeuralNetwork():
 
         loss, acc = self.model.evaluate(self.test_x, self.test_y,
                                         batch_size=256, verbose=0)
-        # Plotter.loss_epoch_plot(history_train.losses)
         self.log('Test Loss:' + str(loss))
         self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'loss': history_train.losses,

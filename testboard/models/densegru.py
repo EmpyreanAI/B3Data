@@ -5,7 +5,7 @@ from keras.models import Sequential
 from keras.layers import GRU, Dense
 from sklearn.preprocessing import MinMaxScaler
 
-from neuralnetwork import NeuralNetwork
+from .neuralnetwork import NeuralNetwork
 
 
 class DenseGRU(NeuralNetwork):
@@ -15,7 +15,8 @@ class DenseGRU(NeuralNetwork):
     without Dense Layer.
     """
 
-    def __init__(self, look_back=12, dense=True, gru_cells=1000, input_shape=1):
+    def __init__(self, look_back=12, dense=True,
+                 gru_cells=1000, input_shape=1):
         """Nani."""
         self.look_back = look_back
         self.dense = dense
