@@ -1,6 +1,9 @@
 import sys
 sys.path.append('../')
 
+import matplotlib.pyplot as plt
+import pandas
+import os
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
@@ -8,11 +11,13 @@ from testboard.stocks import Stocks
 from testboard.stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRICE, VOLUME
 from hyperopt import hp, fmin, tpe, hp, STATUS_OK, Trials
 import numpy
+from hyperopt.plotting import main_plot_vars
+from hyperopt import base
 
 space = {
-    'recurrent_dropout': hp.uniform('recurrent_dropout', 0, 1),
     'batch_size': hp.choice('batch_size', [1, 2, 64, 128, 256, 512]),
     'cells': hp.choice('cells', [1, 2, 16, 20, 50, 80, 100]),
+    'optmizers': hp.choice('optmizers', ['sgd','adam','rmsprop']),
     'look_back_proportion': hp.choice('look_back_proportion', [25, 50, 75, 100]),
     'nb_epochs' :  5000,
 }
@@ -64,8 +69,7 @@ def objective(params):
     train_x, train_y, test_x, test_y, look_back = create_data_set(look_back_proportion=params['look_back_proportion'])
 
     model = Sequential()
-    model.add(LSTM(params['cells'], input_shape=(1, look_back),
-                      recurrent_dropout=params['recurrent_dropout']))
+    model.add(LSTM(params['cells'], input_shape=(1, look_back)))
     model.add(Dense(1))
     model.compile(loss='binary_crossentropy',
                   optimizer='adam',
@@ -81,8 +85,19 @@ def objective(params):
 
 
 trials = Trials()
+best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=1)
+df = pandas.DataFrame()
+for t in trials.trials:
+    df = df.append(t['misc']['vals'],ignore_index=True)
 
-best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=10)
+outname = 'hyperopt_100max_val.csv'
+outdir = '../results'
+if not os.path.exists(outdir):
+    os.mkdir(outdir)
+
+fullname = os.path.join(outdir, outname)
+
+df.to_csv(fullname, mode='a')
 
 print (best)
 print (trials.best_trial)
