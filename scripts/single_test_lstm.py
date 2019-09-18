@@ -22,7 +22,7 @@ space = {
     'nb_epochs' :  5000,
 }
 
-stocks = Stocks(year=2015, cod='VALE3', period=11)
+stocks = Stocks(year=2014, cod='VALE3', period=11)
 dataset = stocks.selected_fields([CLOSING])
 
 def label(dataset, look_back_proportion, mean_of=0):
@@ -87,8 +87,14 @@ def objective(params):
 trials = Trials()
 best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=1)
 df = pandas.DataFrame()
+trial_dict = {}
 for t in trials.trials:
-    df = df.append(t['misc']['vals'],ignore_index=True)
+    trial_dict.update(t['misc']['vals'])
+    trial_dict.update(t['result'])
+    df = df.append(trial_dict, ignore_index=True)
+
+print (best)
+print (trials.best_trial)
 
 outname = 'hyperopt_100max_val.csv'
 outdir = '../results'
@@ -99,5 +105,13 @@ fullname = os.path.join(outdir, outname)
 
 df.to_csv(fullname, mode='a')
 
-print (best)
-print (trials.best_trial)
+best_df = pandas.DataFrame()
+best_df = best_df.append(trials.best_trial, ignore_index=True)
+
+outname = 'best_trial.csv'
+if not os.path.exists(outdir):
+    os.mkdir(outdir)
+
+fullname = os.path.join(outdir, outname)
+
+best_df.to_csv(fullname, mode='a')
