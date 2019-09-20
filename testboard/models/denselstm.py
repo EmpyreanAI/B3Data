@@ -33,13 +33,13 @@ class DenseLSTM(NeuralNetwork):
                        bias_initializer='random_normal'))
 
         if self.dense:
-            model.add(Dense(activation="linear", units=1))
+            model.add(Dense(activation="relu", units=1))
             # model.add(Dense(1))
 
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
 
-        # print(model.summary())
+        print(model.summary())
 
         return model

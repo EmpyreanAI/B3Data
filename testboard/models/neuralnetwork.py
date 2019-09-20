@@ -78,11 +78,18 @@ class NeuralNetwork():
         """Nani."""
         history_train = LossHistory()
         self.model.fit(self.train_x, self.train_y, batch_size=256,
-                       epochs=epochs, verbose=1, callbacks=[history_train])
+                       epochs=epochs, verbose=0, callbacks=[history_train],
+                       use_multiprocessing=True)
 
-        loss, acc = self.model.evaluate(self.test_x, self.test_y,
-                                        batch_size=256, verbose=0)
-        self.log('Test Loss:' + str(loss))
+        print(self.model.metrics_names)
+        _, acc = self.model.evaluate(self.test_x, self.test_y,
+                                     batch_size=256, verbose=0,
+                                     use_multiprocessing=True)
+        preds = self.model.predict(self.test_x, verbose=1,
+                                   use_multiprocessing=True)
+        print(self.test_y)
+        print(preds)
+        # self.log('Test Loss:' + str(loss))
         self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'loss': history_train.losses,
                 'status': STATUS_OK, 'model': self.model}

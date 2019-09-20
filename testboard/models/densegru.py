@@ -1,9 +1,8 @@
 """Nani."""
 
-import numpy
 from keras.models import Sequential
 from keras.layers import GRU, Dense
-from sklearn.preprocessing import MinMaxScaler
+
 
 from .neuralnetwork import NeuralNetwork
 
