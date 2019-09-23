@@ -74,6 +74,22 @@ class NeuralNetwork():
         self.test_x = test_x
         self.test_y = test_y
 
+    # def evaluate_predictions(self, labels, predictions):
+    #     """Nani."""
+    #     confusion_dict = {'vp': 0, 'vn': 0, 'fp': 0, 'fn': 0}
+    #     for i, label in enumerate(labels):
+    #         if label == predictions[i]:
+    #             if label == 1:
+    #                 confusion_dict['vp'] += 1
+    #             else:
+    #                 confusion_dict['vn'] += 1
+    #         else:
+    #             if label == 1 and predictions[i] == 0:
+    #                 confusion_dict['fn'] += 1
+    #             elif label == 0 and predictions[i] == 1:
+    #                 confusion_dict['fp'] += 1
+    #     return confusion_dict
+
     def fit_and_evaluate(self, epochs):
         """Nani."""
         history_train = LossHistory()
@@ -81,18 +97,17 @@ class NeuralNetwork():
                        epochs=epochs, verbose=0, callbacks=[history_train],
                        use_multiprocessing=True)
 
-        print(self.model.metrics_names)
         _, acc = self.model.evaluate(self.test_x, self.test_y,
                                      batch_size=256, verbose=0,
                                      use_multiprocessing=True)
         preds = self.model.predict(self.test_x, verbose=1,
                                    use_multiprocessing=True)
-        print(self.test_y)
-        print(preds)
-        # self.log('Test Loss:' + str(loss))
+        preds = [int(round(pred[0])) for pred in preds]
+        conf_matrix = [self.test_y, preds]
         self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'loss': history_train.losses,
-                'status': STATUS_OK, 'model': self.model}
+                'status': STATUS_OK, 'model': self.model,
+                'cm': conf_matrix}
 
     @staticmethod
     def log(message):

@@ -27,19 +27,15 @@ class DenseLSTM(NeuralNetwork):
         model = Sequential()
         lstm_cells = 1 if not self.dense else self.lstm_cells
 
-        # model.add(Dropout(rate=0.41))
         model.add(LSTM(lstm_cells,
                        input_shape=(self.input_shape, self.look_back),
                        bias_initializer='random_normal'))
 
         if self.dense:
-            model.add(Dense(activation="relu", units=1))
-            # model.add(Dense(1))
+            model.add(Dense(activation="sigmoid", units=1))
 
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
-
-        print(model.summary())
 
         return model

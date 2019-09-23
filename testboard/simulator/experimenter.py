@@ -48,11 +48,15 @@ class Experimenter():
                     s_field = self.gen_str_fields(field)
                     self.log("Stock: %s; Year: %s; Fields: %s"
                              % (stock, str(year), s_field))
-                    data_acc, data_loss = self.execute_experiment(year,
-                                                                  stock,
-                                                                  copy(field))
-                    # self.plotter.acc_box_plot(data_acc, stock, year, s_field)
-                    # self.plotter.loss_epoch_plot(data_loss, stock, year)
+                    data_acc, data_loss, conf_mats = self.execute_experiment(year,
+                                                                             stock,
+                                                                             copy(field))
+                    look_backs = [0.25, 0.5, 0.75, 1.0]
+                    for conf_mat, lb in zip(conf_mats, look_backs):
+                        self.plotter.plot_confusion_matrix(conf_mat[0],
+                                                           conf_mat[1],
+                                                           stock, year,
+                                                           s_field, lb)
                     self.plotter.loss_acc_plot(data_acc, data_loss,
                                                stock, year, s_field)
                     gc.collect()
@@ -62,18 +66,20 @@ class Experimenter():
         """Nani."""
         results_acc = []
         results_loss = []
+        conf_mats = []
 
         stocks = Stocks(year=year, cod=stock, period=6)
         dataset = stocks.selected_fields(fields)
         dataset = duplicate_data(dataset)
         sequencial_kfold = SequencialKFold(n_split=10)
         for i in [0.25, 0.50, 0.75, 1]:
-            acc, loss = sequencial_kfold.split_and_fit(data=dataset,
-                                                       look_back=i)
+            acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
+                                                                 look_back=i)
+            conf_mats.append(conf_mat)
             results_acc.append(acc)
             results_loss.append(loss)
 
-        return results_acc, results_loss
+        return results_acc, results_loss, conf_mats
 
     @staticmethod
     def log(message):

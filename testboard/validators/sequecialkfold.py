@@ -4,6 +4,7 @@ from models.denselstm import DenseLSTM
 
 import numpy as np
 from keras import backend as K
+from collections import Counter
 
 
 class SequencialKFold():
@@ -18,6 +19,7 @@ class SequencialKFold():
         """Nani."""
         acc_list = []
         loss_list = []
+        conf_dict = [[], []]
 
         if data is None:
             self.log("data paramater can't be None")
@@ -40,11 +42,13 @@ class SequencialKFold():
                 result = model.fit_and_evaluate(epochs=epochs)
                 acc_list.append(result['acc'])
                 loss_list.append(result['loss'])
+                conf_dict[0] += list(result['cm'][0])
+                conf_dict[1] += list(result['cm'][1])
                 K.clear_session()
 
             mean_list = np.mean(loss_list, axis=0)
 
-        return acc_list, mean_list
+        return acc_list, mean_list, conf_dict
 
     @staticmethod
     def log(message):
