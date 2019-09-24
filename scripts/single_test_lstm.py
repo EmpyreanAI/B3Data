@@ -7,8 +7,8 @@ import os
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
-from testboard.stocks import Stocks
-from testboard.stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRICE, VOLUME
+from testboard.data_mining.stocks import Stocks
+from testboard.data_mining.stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRICE, VOLUME
 from hyperopt import hp, fmin, tpe, hp, STATUS_OK, Trials
 import numpy
 from hyperopt.plotting import main_plot_vars
@@ -16,9 +16,9 @@ from hyperopt import base
 
 space = {
     'batch_size': hp.choice('batch_size', [1, 2, 64, 128, 256, 512]),
-    'cells': hp.choice('cells', [1, 2, 16, 20, 50, 80, 100]),
+    'cells': hp.choice('cells', [80, 100, 150, 200]),
     'optmizers': hp.choice('optmizers', ['sgd','adam','rmsprop']),
-    'look_back_proportion': hp.choice('look_back_proportion', [25, 50, 75, 100]),
+    'look_back_proportion': hp.choice('look_back_proportion', [25, 50]),
     'nb_epochs' :  5000,
 }
 
@@ -70,7 +70,7 @@ def objective(params):
 
     model = Sequential()
     model.add(LSTM(params['cells'], input_shape=(1, look_back)))
-    model.add(Dense(1))
+    model.add(Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy',
                   optimizer='adam',
                   metrics=['acc'])
@@ -81,11 +81,11 @@ def objective(params):
     loss, acc = model.evaluate(test_x, test_y,
                                  verbose=2)
 
-    return {'loss': -loss, 'status': STATUS_OK }
+    return {'loss': -acc, 'status': STATUS_OK }
 
 
 trials = Trials()
-best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=1)
+best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=33)
 df = pandas.DataFrame()
 trial_dict = {}
 for t in trials.trials:
@@ -96,7 +96,7 @@ for t in trials.trials:
 print (best)
 print (trials.best_trial)
 
-outname = 'hyperopt_100max_val.csv'
+outname = 'hyperopt_33max_val.csv'
 outdir = '../results'
 if not os.path.exists(outdir):
     os.mkdir(outdir)

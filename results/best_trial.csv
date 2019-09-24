@@ -1,0 +1,2 @@
+,book_time,exp_key,misc,owner,refresh_time,result,spec,state,tid,version
+0,2019-09-24 04:07:54.202,,"{'tid': 21, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': {'batch_size': [21], 'cells': [21], 'look_back_proportion': [21], 'optmizers': [21]}, 'vals': {'batch_size': [3], 'cells': [3], 'look_back_proportion': [0], 'optmizers': [0]}}",,2019-09-24 04:08:44.243,"{'loss': -0.8187919483088807, 'status': 'ok'}",,2.0,21.0,0.0
