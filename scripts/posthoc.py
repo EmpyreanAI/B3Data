@@ -11,6 +11,7 @@ import pandas
 import numpy
 import os
 from tqdm import tqdm
+from copy import copy
 
 plotter = Plotter()
 cells = [1, 50, 80, 100, 150, 200]
@@ -22,18 +23,17 @@ def run():
     """Nani."""
     results_acc = []
     df = pandas.DataFrame()
+    stocks = Stocks(year=2014, cod='PETR3', period=6)
+    dataset = stocks.selected_fields(copy(fields))
+    dataset = duplicate_data(dataset)
 
     for cell in tqdm(cells):
         cells_results = []
-        for year in years:
-            stocks = Stocks(year=year, cod='PETR3', period=6)
-            dataset = stocks.selected_fields(fields)
-            dataset = duplicate_data(dataset)
+        for i in range(10):
             sequencial_kfold = SequencialKFold(n_split=10)
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
                                                                  look_back=0.5,
                                                                  cells=cell)
-            acc = [1,2,3,4,5,6,7]
             results_acc.append(acc)
             cells_results.append(numpy.mean(acc))
 
@@ -51,5 +51,3 @@ def run():
     return results_acc
 
 results = run()
-
-plotter.acc_cells_box_plot(data=results, stock='PETR3', year='2014')
