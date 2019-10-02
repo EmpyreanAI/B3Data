@@ -15,7 +15,7 @@ class SequencialKFold():
         self.n_split = n_split
 
     # Tem que refatorar ainda
-    def split_and_fit(self, data=None, epochs=5000, look_back=0.25):
+    def split_and_fit(self, data=None, epochs=5000, look_back=0.25, cells=100):
         """Nani."""
         acc_list = []
         loss_list = []
@@ -37,7 +37,7 @@ class SequencialKFold():
                 self.log('DATA_SHAPE = ' + str(data_splited.shape))
                 del model
                 model = DenseLSTM(input_shape=data_splited.shape[1],
-                                  look_back=int(new_look_back))
+                                  look_back=int(new_look_back), lstm_cells=cells)
                 model.create_data_for_fit(data_splited)
                 result = model.fit_and_evaluate(epochs=epochs)
                 acc_list.append(result['acc'])

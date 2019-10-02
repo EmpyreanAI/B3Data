@@ -3,7 +3,6 @@
 from keras.models import Sequential
 from keras.layers import GRU, Dense
 
-
 from .neuralnetwork import NeuralNetwork
 
 

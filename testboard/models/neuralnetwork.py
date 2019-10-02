@@ -98,7 +98,7 @@ class NeuralNetwork():
                        use_multiprocessing=True)
 
         _, acc = self.model.evaluate(self.test_x, self.test_y,
-                                     batch_size=256, verbose=0,
+                                     batch_size=64, verbose=0,
                                      use_multiprocessing=True)
         preds = self.model.predict(self.test_x, verbose=1,
                                    use_multiprocessing=True)

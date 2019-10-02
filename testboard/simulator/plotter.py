@@ -34,6 +34,27 @@ class Plotter():
         plt.savefig(filename)
         plt.close('all')
 
+    @classmethod
+    def acc_cells_box_plot(cls, data, stock, year):
+        """Nani."""
+        _, ax_plot = plt.subplots()
+        hfont = {'fontname': 'monospace'}
+        ax_plot.set_title("{}-{}".format(stock, year), **hfont)
+        ax_plot.set_xlabel('Quantidade de Células LSTM', **hfont)
+        ax_plot.set_ylabel('Accuracy', **hfont)
+        bplot = ax_plot.boxplot(data, patch_artist=True, sym='.')
+        ax_plot.set_xticklabels(['50', '80', '100', '150', '200'])
+        colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E', '#21370F']
+
+        for patch, color in zip(bplot['boxes'], colors):
+            patch.set_facecolor(color)
+        plt.setp(bplot['medians'], color='#ffffff')
+        # return plt
+        filename = "../graphics/{}/{}/acc_cells_box_plot2.png".format(stock, year)
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        plt.savefig(filename)
+        plt.close('all')
+
     @staticmethod
     def loss_epoch_plot(cls, loss_train, stock, year):
         """Nani."""
@@ -86,7 +107,7 @@ class Plotter():
 
         Normalization can be applied by setting `normalize=True`.
         """
-        title = f"Confusion Matrix {stock}-{year}"
+        # title = f"Confusion Matrix {stock}-{year}"
 
         # Compute confusion matrix
         cm = confusion_matrix(y_true, y_pred)
@@ -109,8 +130,8 @@ class Plotter():
                                             + cm[1][0] + cm[1][1])
         accuracy = round(accuracy, 4)
 
-        textstr = f"Sensitivity: {sensitivity}\nPrecision: {precision}\n"
-        textstr2 = f"Specifity: {specifity}\nAccuracy: {accuracy}"
+        # textstr = f"Sensitivity: {sensitivity}\nPrecision: {precision}\n"
+        # textstr2 = f"Specifity: {specifity}\nAccuracy: {accuracy}"
         textstr += textstr2
 
         fig, ax = plt.subplots()
