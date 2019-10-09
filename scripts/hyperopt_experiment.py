@@ -22,7 +22,7 @@ space = {
     'nb_epochs' :  5000,
 }
 
-stocks = Stocks(year=2014, cod='VALE3', period=11)
+stocks = Stocks(year=2014, cod='VALE3', period=5)
 dataset = stocks.selected_fields([CLOSING])
 
 def label(dataset, look_back_proportion, mean_of=0):

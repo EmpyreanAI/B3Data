@@ -20,7 +20,6 @@ dataset = duplicate_data(dataset)
 def run():
     """Nani."""
     results_acc = []
-    df = pandas.DataFrame()
 
     for cell in cells:
         sequencial_kfold = SequencialKFold(n_split=10)
@@ -28,16 +27,6 @@ def run():
                                                              look_back=0.5,
                                                              cells=cell)
         results_acc.append(acc)
-        df = df.append({'cells ' + str(cell): acc}, ignore_index=True)
-
-    outname = 'cells_emepriment.csv'
-    outdir = '../results'
-    if not os.path.exists(outdir):
-        os.mkdir(outdir)
-
-    fullname = os.path.join(outdir, outname)
-    df.to_csv(fullname, mode='a')
-
     return results_acc
 results = run()
 
