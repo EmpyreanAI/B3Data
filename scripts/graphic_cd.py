@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import Orange
+import Orange, orngStat
 import pandas
 import numpy
 
@@ -28,7 +28,7 @@ avranks = numpy.mean(table_ranks, axis=0)
 print(avranks)
 
 names = ['cells_1', 'cells_50', 'cells_80', 'cells_100', 'cells_150', 'cells_200']
-cd = Orange.evaluation.compute_CD(avranks, 10) #tested on 30 datasets
-Orange.evaluation.graph_ranks(avranks, names, cd=cd, width=6, textspace=1.5)
+cd = orngStat.compute_CD(avranks, 10) #tested on 30 datasets
+orngStat.graph_ranks('output.eps', avranks, names, cd=cd, width=6, textspace=1.5)
 plt.show()
-plt.savefig('../graphics/cd_digram.png')
+# plt.savefig('../graphics/cd_digram.png')

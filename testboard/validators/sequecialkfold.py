@@ -15,7 +15,7 @@ class SequencialKFold():
         self.n_split = n_split
 
     # Tem que refatorar ainda
-    def split_and_fit(self, data=None, epochs=5000, look_back=0.25, cells=100):
+    def split_and_fit(self, data=None, epochs=1, look_back=0.50, cells=1):
         """Nani."""
         acc_list = []
         loss_list = []
@@ -29,8 +29,9 @@ class SequencialKFold():
             model = {}
             for i in range(1, self.n_split+1):
                 data_splited = data[:jump_size*i, :]
-
                 new_look_back = (len(data_splited)*0.3)*look_back
+                self.log("LOOK BACK = {}".format(look_back))
+                self.log("DATA SPLITED SIZE = {}".format(len(data_splited)*0.3))
                 self.log('LOOK_BACK = ' + str(int(new_look_back)))
                 self.log('Data_Size = ' + str(int(len(data_splited))))
                 self.log('PROPORTION = ' + str(new_look_back))
@@ -48,7 +49,9 @@ class SequencialKFold():
 
             mean_list = np.mean(loss_list, axis=0)
 
-        return acc_list, mean_list, conf_dict
+        # print("DATA_LEN * LOOK_BACK = {}".format(data_len*look_back))
+        # print("NOVO LOOK BACK = {}".format(new_look_back))
+        return acc_list, mean_list, conf_dict, new_look_back
 
     @staticmethod
     def log(message):

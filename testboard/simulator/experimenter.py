@@ -48,7 +48,7 @@ class Experimenter():
                     s_field = self.gen_str_fields(field)
                     self.log("Stock: %s; Year: %s; Fields: %s"
                              % (stock, str(year), s_field))
-                    data_acc, data_loss, conf_mats = self.execute_experiment(year,
+                    data_acc, data_loss, conf_mats, data_amts = self.execute_experiment(year,
                                                                              stock,
                                                                              copy(field))
                     look_backs = [0.25, 0.5, 0.75, 1.0]
@@ -58,7 +58,7 @@ class Experimenter():
                                                            stock, year,
                                                            s_field, lb)
                     self.plotter.loss_acc_plot(data_acc, data_loss,
-                                               stock, year, s_field)
+                                               stock, year, s_field, data_amts)
                     gc.collect()
 
     @staticmethod
@@ -67,19 +67,21 @@ class Experimenter():
         results_acc = []
         results_loss = []
         conf_mats = []
+        data_amts = []
 
-        stocks = Stocks(year=year, cod=stock, period=6)
+        stocks = Stocks(year=year, cod=stock, period=5)
         dataset = stocks.selected_fields(fields)
         dataset = duplicate_data(dataset)
         sequencial_kfold = SequencialKFold(n_split=10)
         for i in [0.25, 0.50, 0.75, 1]:
-            acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
-                                                                 look_back=i)
+            acc, loss, conf_mat, data_amt = sequencial_kfold.split_and_fit(data=dataset,
+                                                                           look_back=i)
             conf_mats.append(conf_mat)
+            data_amts.append(data_amt)
             results_acc.append(acc)
             results_loss.append(loss)
 
-        return results_acc, results_loss, conf_mats
+        return results_acc, results_loss, conf_mats, data_amts
 
     @staticmethod
     def log(message):

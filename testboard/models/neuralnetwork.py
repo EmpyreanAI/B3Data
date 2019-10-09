@@ -92,10 +92,10 @@ class NeuralNetwork():
 
     def fit_and_evaluate(self, epochs):
         """Nani."""
-        history_train = LossHistory()
-        self.model.fit(self.train_x, self.train_y, batch_size=256,
-                       epochs=epochs, verbose=0, callbacks=[history_train],
+        model = self.model.fit(self.train_x, self.train_y, batch_size=64,
+                       epochs=epochs, verbose=0,
                        use_multiprocessing=True)
+        history_train = model.history['loss']
 
         _, acc = self.model.evaluate(self.test_x, self.test_y,
                                      batch_size=64, verbose=0,
@@ -105,7 +105,7 @@ class NeuralNetwork():
         preds = [int(round(pred[0])) for pred in preds]
         conf_matrix = [self.test_y, preds]
         self.log('Test Accuracy:' + str(acc))
-        return {'acc': acc, 'loss': history_train.losses,
+        return {'acc': acc, 'loss': history_train,
                 'status': STATUS_OK, 'model': self.model,
                 'cm': conf_matrix}
 
