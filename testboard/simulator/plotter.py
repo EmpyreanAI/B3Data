@@ -43,7 +43,7 @@ class Plotter():
         ax_plot.set_xlabel('Quantidade de Células LSTM', **hfont)
         ax_plot.set_ylabel('Accuracy', **hfont)
         bplot = ax_plot.boxplot(data, patch_artist=True, sym='.')
-        ax_plot.set_xticklabels(['50', '80', '100', '150', '200'])
+        ax_plot.set_xticklabels(['1', '50', '80', '100', '150', '200'])
         colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E', '#21370F']
 
         for patch, color in zip(bplot['boxes'], colors):
