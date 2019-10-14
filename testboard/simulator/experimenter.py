@@ -71,17 +71,10 @@ class Experimenter():
         stocks = Stocks(year=year, cod=stock, period=5)
         dataset = stocks.selected_fields(fields)
         dataset = duplicate_data(dataset)
-<<<<<<< HEAD
         sequencial_kfold = SequencialKFold(n_split=6)
         for i in [1, 3, 6, 9, 12]:
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
                                                                  look_back=i)
-=======
-        sequencial_kfold = SequencialKFold(n_split=10)
-        for i in [0.25, 0.50, 0.75, 1]:
-            acc, loss, conf_mat, data_amt = sequencial_kfold.split_and_fit(data=dataset,
-                                                                           look_back=i)
->>>>>>> 0e13be389485cb1bbda37496a8d01add56ad4a21
             conf_mats.append(conf_mat)
             data_amts.append(data_amt)
             results_acc.append(acc)
