@@ -43,7 +43,7 @@ class Plotter():
         ax_plot.set_xlabel('Quantidade de Células LSTM', **hfont)
         ax_plot.set_ylabel('Accuracy', **hfont)
         bplot = ax_plot.boxplot(data, patch_artist=True, sym='.')
-        ax_plot.set_xticklabels(['50', '80', '100', '150', '200'])
+        ax_plot.set_xticklabels(['1', '50', '80', '100', '150', '200'])
         colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E', '#21370F']
 
         for patch, color in zip(bplot['boxes'], colors):
@@ -69,7 +69,7 @@ class Plotter():
         plt.show()
 
     @staticmethod
-    def loss_acc_plot(acc, loss, stock, year, features):
+    def loss_acc_plot(acc, loss, stock, year, features, data_amt):
         """Nani."""
         fig1, ax1 = plt.subplots()  # figsize=(20, 10)
         hfont = {'fontname': 'monospace'}
@@ -86,8 +86,9 @@ class Plotter():
         ax2.set_xlabel('Window Size', **hfont)
         ax2.set_ylabel('Accuracy', **hfont)
 
+        print(data_amt)
         bplot = ax2.boxplot(acc, patch_artist=True, sym='.')
-        ax2.set_xticklabels(['25%', '50%', '75%', '100%'])
+        ax2.set_xticklabels(data_amt)
         colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
         for patch, color, line in zip(bplot['boxes'], colors, lines):
             patch.set_linestyle(line)
@@ -107,7 +108,7 @@ class Plotter():
 
         Normalization can be applied by setting `normalize=True`.
         """
-        # title = f"Confusion Matrix {stock}-{year}"
+        title = f"Confusion Matrix {stock}-{year}"
 
         # Compute confusion matrix
         cm = confusion_matrix(y_true, y_pred)
@@ -130,8 +131,8 @@ class Plotter():
                                             + cm[1][0] + cm[1][1])
         accuracy = round(accuracy, 4)
 
-        # textstr = f"Sensitivity: {sensitivity}\nPrecision: {precision}\n"
-        # textstr2 = f"Specifity: {specifity}\nAccuracy: {accuracy}"
+        textstr = f"Sensitivity: {sensitivity}\nPrecision: {precision}\n"
+        textstr2 = f"Specifity: {specifity}\nAccuracy: {accuracy}"
         textstr += textstr2
 
         fig, ax = plt.subplots()
@@ -161,8 +162,8 @@ class Plotter():
 
         fig.tight_layout()
         filename = "./graphics/{}/{}/boxplot_{}_{}.pdf".format(stock, year,
-                                                           look_back,
-                                                           features)
+                                                               look_back,
+                                                               features)
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         plt.savefig(filename)
         plt.close('all')
