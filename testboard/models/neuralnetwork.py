@@ -3,7 +3,6 @@
 import numpy
 from hyperopt import STATUS_OK
 from sklearn.preprocessing import MinMaxScaler
-from models.helpers.callbacks import LossHistory
 
 
 class NeuralNetwork():

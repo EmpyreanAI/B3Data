@@ -49,6 +49,7 @@ class SequencialKFold():
 
             mean_list = np.mean(loss_list, axis=0)
 
+        import pdb; pdb.set_trace()
         # print("DATA_LEN * LOOK_BACK = {}".format(data_len*look_back))
         # print("NOVO LOOK BACK = {}".format(new_look_back))
         return acc_list, mean_list, conf_dict, new_look_back
