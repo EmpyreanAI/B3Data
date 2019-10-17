@@ -4,8 +4,8 @@ import gc
 from copy import copy
 
 from validators.sequecialkfold import SequencialKFold
-from data_mining.stocks import Stocks, CLOSING, OPENING, MAX_PRICE
-from data_mining.stocks import MIN_PRICE, MEAN_PRICE, VOLUME
+from data_mining.stocks import Stocks, CLOSING
+# from data_mining.stocks import VOLUME, OPENING
 from simulator.plotter import Plotter
 from data_mining.smote import duplicate_data
 
@@ -47,9 +47,8 @@ class Experimenter():
                     s_field = self.gen_str_fields(field)
                     self.log("Stock: %s; Year: %s; Fields: %s"
                              % (stock, str(year), s_field))
-                    data_acc, data_loss, conf_mats, data_amts = self.execute_experiment(year,
-                                                                             stock,
-                                                                             copy(field))
+                    res = self.execute_experiment(year, stock, copy(field))
+                    data_acc, data_loss, conf_mats, data_amts = res
                     look_backs = [1, 3, 6, 9, 12]
                     for conf_mat, lb in zip(conf_mats, look_backs):
                         self.plotter.plot_confusion_matrix(conf_mat[0],
@@ -75,10 +74,11 @@ class Experimenter():
         for i in [1, 3, 6, 9, 12]:
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
                                                                  look_back=i)
-            conf_mats.append(conf_mat)
+
             data_amts.append(data_amt)
             results_acc.append(acc)
             results_loss.append(loss)
+            conf_mats.append(conf_mat)
 
         return results_acc, results_loss, conf_mats, data_amts
 
