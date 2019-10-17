@@ -75,6 +75,7 @@ class Experimenter():
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
                                                                  look_back=i)
 
+            # This need fixing.
             data_amts.append(data_amt)
             results_acc.append(acc)
             results_loss.append(loss)
