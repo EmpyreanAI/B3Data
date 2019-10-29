@@ -14,8 +14,7 @@ from tqdm import tqdm
 from copy import copy
 
 plotter = Plotter()
-cells = [1, 50, 80, 100, 150, 200]
-years = [2014, 2015, 2016, 2017]
+cells = []
 fields = [CLOSING]
 
 
@@ -23,7 +22,10 @@ def run():
     """Nani."""
     results_acc = []
     df = pandas.DataFrame()
-    stocks = Stocks(year=2014, cod='VALE3', period=5)
+    cod = sys.argv[1]
+    batch_size = int(sys.argv[2])
+    optimizer = sys.argv[3]
+    stocks = Stocks(year=2014, cod=cod, period=5)
     dataset = stocks.selected_fields(copy(fields))
     dataset = duplicate_data(dataset)
 
@@ -32,14 +34,16 @@ def run():
         for i in range(10):
             sequencial_kfold = SequencialKFold(n_split=6)
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
-                                                                 cells=cell)
+                                                                 cells=cell,
+                                                                 optimizer=optimizer,
+                                                                 batch_size=batch_size)
             results_acc.append(acc)
             cells_results.append(numpy.mean(acc))
 
         df_temp = pandas.DataFrame({'cells_' + str(cell): cells_results})
         df = pandas.concat([df, df_temp], axis=1)
 
-    outname = 'cells_experiment_VALE.csv'
+    outname = 'posthoc_' + cod + '.csv'
     outdir = '../results'
     if not os.path.exists(outdir):
         os.mkdir(outdir)

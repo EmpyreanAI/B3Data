@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
-import Orange, orngStat
+# import Orange, orngStat
 import pandas
 import numpy
 
-df = pandas.read_csv('../results/cells_experiment.csv', index_col=0)
+df = pandas.read_csv('../results/cells_experiment_ABEV.csv', index_col=0)
 
 initial_rank = 1
 names = ['cells_1', 'cells_50', 'cells_80', 'cells_100', 'cells_150', 'cells_200']
@@ -28,7 +28,7 @@ avranks = numpy.mean(table_ranks, axis=0)
 print(avranks)
 
 names = ['cells_1', 'cells_50', 'cells_80', 'cells_100', 'cells_150', 'cells_200']
-cd = orngStat.compute_CD(avranks, 10) #tested on 30 datasets
+cd = orngStat.compute_CD(avranks, 6) #tested on 30 datasets
 orngStat.graph_ranks('output.eps', avranks, names, cd=cd, width=6, textspace=1.5)
 plt.show()
 # plt.savefig('../graphics/cd_digram.png')

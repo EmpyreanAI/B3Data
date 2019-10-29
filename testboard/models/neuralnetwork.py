@@ -89,7 +89,7 @@ class NeuralNetwork():
     #                 confusion_dict['fp'] += 1
     #     return confusion_dict
 
-    def fit_and_evaluate(self, epochs):
+    def fit_and_evaluate(self, epochs, batch_size):
         """Nani."""
         model = self.model.fit(self.train_x, self.train_y, batch_size=64,
                                epochs=epochs, verbose=0,
@@ -97,7 +97,7 @@ class NeuralNetwork():
         history_train = model.history['loss']
 
         _, acc = self.model.evaluate(self.test_x, self.test_y,
-                                     batch_size=32, verbose=0,
+                                     batch_size=batch_size, verbose=0,
                                      use_multiprocessing=True)
         preds = self.model.predict(self.test_x, verbose=1,
                                    use_multiprocessing=True)

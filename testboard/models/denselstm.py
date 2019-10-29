@@ -14,12 +14,13 @@ class DenseLSTM(NeuralNetwork):
     """
 
     def __init__(self, look_back=12, dense=True,
-                 lstm_cells=1, input_shape=1):
+                 lstm_cells=1, input_shape=1, optimizer='rmsprop'):
         """Nani."""
         self.look_back = look_back
         self.dense = dense
         self.lstm_cells = lstm_cells
         self.input_shape = input_shape
+        self.optimizer = optimizer
         super(DenseLSTM, self).__init__()
 
     def _create_model(self):
@@ -35,7 +36,7 @@ class DenseLSTM(NeuralNetwork):
             model.add(Dense(activation="sigmoid", units=1))
 
         model.compile(loss='binary_crossentropy',
-                      optimizer='rmsprop',
+                      optimizer=self.optimizer,
                       metrics=['accuracy'])
 
         return model
