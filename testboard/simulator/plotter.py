@@ -4,10 +4,7 @@ import os
 import numpy as np
 
 import matplotlib.pyplot as plt
-from sklearn import datasets, svm
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
-from sklearn.utils.multiclass import unique_labels
 
 
 class Plotter():
@@ -50,7 +47,8 @@ class Plotter():
             patch.set_facecolor(color)
         plt.setp(bplot['medians'], color='#ffffff')
         # return plt
-        filename = "../graphics/{}/{}/acc_cells_box_plot2.png".format(stock, year)
+        filename = "../graphics/{}/{}/acc_cells_box_plot2.png".format(stock,
+                                                                      year)
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         plt.savefig(filename)
         plt.close('all')
@@ -74,7 +72,7 @@ class Plotter():
         fig1, ax1 = plt.subplots()  # figsize=(20, 10)
         hfont = {'fontname': 'monospace'}
         colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
-        lines = [':', '-.','--', '-']
+        lines = [':', '-.', '--', '-']
         ax1.set_title("{}-{}".format(stock, year), **hfont)
         ax1.set_xlabel('Epoch', **hfont)
         ax1.set_ylabel('Loss', **hfont)

@@ -4,7 +4,6 @@ from models.denselstm import DenseLSTM
 
 import numpy as np
 from keras import backend as K
-from collections import Counter
 
 
 class SequencialKFold():
@@ -46,8 +45,6 @@ class SequencialKFold():
 
             mean_list = np.mean(loss_list, axis=0)
 
-        # print("DATA_LEN * LOOK_BACK = {}".format(data_len*look_back))
-        # print("NOVO LOOK BACK = {}".format(new_look_back))
         return acc_list, mean_list, conf_dict
 
     @staticmethod

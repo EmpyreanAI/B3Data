@@ -3,7 +3,6 @@
 import numpy
 from hyperopt import STATUS_OK
 from sklearn.preprocessing import MinMaxScaler
-from models.helpers.callbacks import LossHistory
 
 
 class NeuralNetwork():
@@ -93,8 +92,8 @@ class NeuralNetwork():
     def fit_and_evaluate(self, epochs):
         """Nani."""
         model = self.model.fit(self.train_x, self.train_y, batch_size=64,
-                       epochs=epochs, verbose=0,
-                       use_multiprocessing=True)
+                               epochs=epochs, verbose=0,
+                               use_multiprocessing=True)
         history_train = model.history['loss']
 
         _, acc = self.model.evaluate(self.test_x, self.test_y,
