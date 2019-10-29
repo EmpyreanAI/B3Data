@@ -35,7 +35,7 @@ class DenseLSTM(NeuralNetwork):
             model.add(Dense(activation="sigmoid", units=1))
 
         model.compile(loss='binary_crossentropy',
-                      optimizer='adam',
+                      optimizer='rmsprop',
                       metrics=['accuracy'])
 
         return model

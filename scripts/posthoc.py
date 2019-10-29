@@ -23,16 +23,15 @@ def run():
     """Nani."""
     results_acc = []
     df = pandas.DataFrame()
-    stocks = Stocks(year=2014, cod='PETR3', period=6)
+    stocks = Stocks(year=2014, cod='VALE3', period=5)
     dataset = stocks.selected_fields(copy(fields))
     dataset = duplicate_data(dataset)
 
     for cell in tqdm(cells):
         cells_results = []
         for i in range(10):
-            sequencial_kfold = SequencialKFold(n_split=10)
+            sequencial_kfold = SequencialKFold(n_split=6)
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
-                                                                 look_back=0.5,
                                                                  cells=cell)
             results_acc.append(acc)
             cells_results.append(numpy.mean(acc))
@@ -40,7 +39,7 @@ def run():
         df_temp = pandas.DataFrame({'cells_' + str(cell): cells_results})
         df = pandas.concat([df, df_temp], axis=1)
 
-    outname = 'cells_experiment.csv'
+    outname = 'cells_experiment_VALE.csv'
     outdir = '../results'
     if not os.path.exists(outdir):
         os.mkdir(outdir)

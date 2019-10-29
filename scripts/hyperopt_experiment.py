@@ -18,13 +18,13 @@ from keras import backend as K
 
 space = {
     'batch_size': hp.choice('batch_size', [1, 2, 32, 64, 128, 256, 512]),
-    'cells': hp.choice('cells', [1]),
+    'cells': hp.choice('cells', [50]),
     'optimizers': hp.choice('optimizers', ['sgd','adam','rmsprop']),
     'look_back_proportion': hp.choice('look_back_proportion', [12]),
     'nb_epochs' :  5000,
 }
 
-stocks = Stocks(year=2014, cod='ABEV3', period=5)
+stocks = Stocks(year=2014, cod='VALE3', period=5)
 dataset = stocks.selected_fields([CLOSING])
 
 def label(dataset, look_back_proportion, mean_of=0):
@@ -100,7 +100,7 @@ for t in trials.trials:
 print (best)
 print (trials.best_trial)
 
-outname = 'hyperopt_100_ABEV3.csv'
+outname = 'hyperopt_100_VALE3.csv'
 outdir = '../results'
 if not os.path.exists(outdir):
     os.mkdir(outdir)
@@ -112,7 +112,7 @@ df.to_csv(fullname, mode='a')
 best_df = pandas.DataFrame()
 best_df = best_df.append(trials.best_trial, ignore_index=True)
 
-outname = 'best_trial_ABEV.csv'
+outname = 'best_trial_VALE.csv'
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 

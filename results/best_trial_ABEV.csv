@@ -1,2 +1,6 @@
 ,book_time,exp_key,misc,owner,refresh_time,result,spec,state,tid,version
 0,2019-10-14 13:38:04.633,,"{'tid': 22, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': {'batch_size': [22], 'cells': [22], 'look_back_proportion': [22], 'optimizers': [22]}, 'vals': {'batch_size': [2], 'cells': [0], 'look_back_proportion': [0], 'optimizers': [2]}}",,2019-10-14 13:38:30.244,"{'loss': -0.5857142861400332, 'status': 'ok'}",,2.0,22.0,0.0
+,book_time,exp_key,misc,owner,refresh_time,result,spec,state,tid,version
+0,2019-10-24 12:45:09.178,,"{'tid': 29, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': {'batch_size': [29], 'cells': [29], 'look_back_proportion': [29], 'optimizers': [29]}, 'vals': {'batch_size': [4], 'cells': [0], 'look_back_proportion': [0], 'optimizers': [1]}}",,2019-10-24 12:45:42.321,"{'loss': -0.5857142861400332, 'status': 'ok'}",,2.0,29.0,0.0
+,book_time,exp_key,misc,owner,refresh_time,result,spec,state,tid,version
+0,2019-10-24 12:52:09.130,,"{'tid': 35, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': {'batch_size': [35], 'cells': [35], 'look_back_proportion': [35], 'optimizers': [35]}, 'vals': {'batch_size': [0], 'cells': [0], 'look_back_proportion': [0], 'optimizers': [2]}}",,2019-10-24 13:02:01.516,"{'loss': -0.5285714268684387, 'status': 'ok'}",,2.0,35.0,0.0

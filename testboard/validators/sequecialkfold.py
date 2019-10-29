@@ -48,7 +48,7 @@ class SequencialKFold():
 
         # print("DATA_LEN * LOOK_BACK = {}".format(data_len*look_back))
         # print("NOVO LOOK BACK = {}".format(new_look_back))
-        return acc_list, mean_list, conf_dict, new_look_back
+        return acc_list, mean_list, conf_dict
 
     @staticmethod
     def log(message):
