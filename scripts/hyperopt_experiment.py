@@ -69,23 +69,39 @@ def create_data_set(look_back_proportion):
 def objective(params):
     train_x, train_y, test_x, test_y, look_back = create_data_set(look_back_proportion=params['look_back_proportion'])
 
+    def recall_m(y_true, y_pred):
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+        recall = true_positives / (possible_positives + K.epsilon())
+        return recall
+
+    def precision_m(y_true, y_pred):
+            true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+            predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+            precision = true_positives / (predicted_positives + K.epsilon())
+            return precision
+
+    def f1_m(y_true, y_pred):
+        precision = precision_m(y_true, y_pred)
+        recall = recall_m(y_true, y_pred)
+        return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
     model = Sequential()
     model.add(LSTM(params['cells'], input_shape=(1, look_back)))
     model.add(Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy',
                   optimizer=params['optimizers'],
-                  metrics=['acc'])
+                  metrics=['acc',f1_m, precision_m, recall_m])
 
 
     model.fit(train_x, train_y, batch_size=params['batch_size'], epochs=params['nb_epochs'],
                    verbose=0, validation_split=0.33)
-    loss, acc = model.evaluate(test_x, test_y,
+    loss, acc, f1_score, precision, recall = model.evaluate(test_x, test_y,
                                  verbose=2)
 
     K.clear_session()
 
-    return {'loss': -acc, 'status': STATUS_OK }
-
+    return {'loss': -f1_score, 'status': STATUS_OK }
 
 trials = Trials()
 best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=100)
