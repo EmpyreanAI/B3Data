@@ -104,7 +104,7 @@ def objective(params):
     return {'loss': -f1_score, 'status': STATUS_OK }
 
 trials = Trials()
-best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=100)
+best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=1000)
 df = pandas.DataFrame()
 trial_dict = {}
 for t in trials.trials:
