@@ -1,0 +1,2 @@
+,book_time,exp_key,misc,owner,refresh_time,result,spec,state,tid,version
+0,2020-01-16 14:34:39.300,,"{'idxs': {'cells': [381], 'look_back_proportion': [381], 'batch_size': [381], 'optimizers': [381]}, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'tid': 381, 'vals': {'cells': [2], 'look_back_proportion': [3], 'batch_size': [1], 'optimizers': [2]}}",,2020-01-16 14:40:55.236,"{'loss': -0.8300652503967285, 'status': 'ok'}",,2.0,381.0,0.0

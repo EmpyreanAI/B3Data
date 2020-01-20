@@ -49,7 +49,6 @@ nose2==0.8.0
 notebook==6.0.0
 numba==0.45.1
 numpy==1.17.3
-openTSNE==0.3.2
 pandas==0.23.4
 pandocfilters==1.4.2
 parso==0.5.1
