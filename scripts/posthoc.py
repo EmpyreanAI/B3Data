@@ -25,7 +25,7 @@ def run():
     cod = sys.argv[1]
     batch_size = int(sys.argv[2])
     optimizer = sys.argv[3]
-    look_back = sys.argv[4]
+    look_back = int(sys.argv[4])
     stocks = Stocks(year=2014, cod=cod, period=5)
     dataset = stocks.selected_fields(copy(fields))
     dataset = duplicate_data(dataset)
