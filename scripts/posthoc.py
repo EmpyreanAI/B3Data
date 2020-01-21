@@ -25,6 +25,7 @@ def run():
     cod = sys.argv[1]
     batch_size = int(sys.argv[2])
     optimizer = sys.argv[3]
+    look_back = sys.argv[4]
     stocks = Stocks(year=2014, cod=cod, period=5)
     dataset = stocks.selected_fields(copy(fields))
     dataset = duplicate_data(dataset)
@@ -36,7 +37,8 @@ def run():
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
                                                                  cells=cell,
                                                                  optimizer=optimizer,
-                                                                 batch_size=batch_size)
+                                                                 batch_size=batch_size,
+                                                                 look_back=look_back)
             results_acc.append(acc)
             cells_results.append(numpy.mean(acc))
 
