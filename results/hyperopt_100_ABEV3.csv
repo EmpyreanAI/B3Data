@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 index,batch_size,cells,look_back,loss,optimizers,status
+=======
+,batch_size,cells,look_back_proportion,loss,optimizers,status
+>>>>>>> 775fa1faa9589e1ed3a856bef5ada950593696c2
 0,[3],[0],[0],-0.60072922706604,[2],ok
 1,[2],[5],[1],-0.44814810156822205,[1],ok
 2,[4],[4],[3],-0.17023807764053345,[2],ok
