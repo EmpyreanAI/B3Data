@@ -106,7 +106,7 @@ class NeuralNetwork():
         self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'loss': history_train,
                 'status': STATUS_OK, 'model': self.model,
-                'cm': conf_matrix, 'f1_score': f1_score}
+                'cm': conf_matrix, 'f1_score': f1_score, 'precision': precision, 'recall': recall}
 
     @staticmethod
     def log(message):

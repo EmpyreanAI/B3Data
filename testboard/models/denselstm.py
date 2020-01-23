@@ -19,7 +19,7 @@ class DenseLSTM(NeuralNetwork):
         """Nani."""
         self.look_back = look_back
         self.dense = dense
-        self.lstm_cells = lstm_cells
+        self.lstm_cells = 300
         self.input_shape = input_shape
         self.optimizer = optimizer
         super(DenseLSTM, self).__init__()
@@ -57,5 +57,7 @@ class DenseLSTM(NeuralNetwork):
         model.compile(loss='binary_crossentropy',
                       optimizer=self.optimizer,
                       metrics=['accuracy', f1_m, precision_m, recall_m])
+
+        model.summary()
 
         return model

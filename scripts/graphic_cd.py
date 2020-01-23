@@ -28,7 +28,13 @@ avranks = numpy.mean(table_ranks, axis=0)
 print(avranks)
 
 names = ['cells_1', 'cells_50', 'cells_80', 'cells_100', 'cells_150', 'cells_200']
+<<<<<<< HEAD
+cd = orngStat.compute_CD(avranks, 10) #tested on 30 datasets
+orngStat.graph_ranks('../results/experiment_ABEV.eps', avranks, names, cd=cd, width=6, textspace=1.5)
+# plt.show()
+=======
 cd = orngStat.compute_CD(avranks, 6) #tested on 30 datasets
 orngStat.graph_ranks('output.eps', avranks, names, cd=cd, width=6, textspace=1.5)
 plt.show()
+>>>>>>> 09fc6653228c2283470742b5df071dc71e78aa32
 # plt.savefig('../graphics/cd_digram.png')
