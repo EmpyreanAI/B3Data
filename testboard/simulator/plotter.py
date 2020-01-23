@@ -104,7 +104,7 @@ class Plotter():
 
         Normalization can be applied by setting `normalize=True`.
         """
-        title = f"Confusion Matrix {stock}-{year}"
+        # title = f"Confusion Matrix {stock}-{year}"
 
         # Compute confusion matrix
         cm = confusion_matrix(y_true, y_pred)
@@ -127,8 +127,8 @@ class Plotter():
                                             + cm[1][0] + cm[1][1])
         accuracy = round(accuracy, 4)
 
-        textstr = f"Sensitivity: {sensitivity}\nPrecision: {precision}\n"
-        textstr2 = f"Specifity: {specifity}\nAccuracy: {accuracy}"
+        # textstr = f"Sensitivity: {sensitivity}\nPrecision: {precision}\n"
+        # textstr2 = f"Specifity: {specifity}\nAccuracy: {accuracy}"
         textstr += textstr2
 
         fig, ax = plt.subplots()

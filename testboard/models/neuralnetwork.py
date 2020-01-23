@@ -89,16 +89,16 @@ class NeuralNetwork():
     #                 confusion_dict['fp'] += 1
     #     return confusion_dict
 
-    def fit_and_evaluate(self, epochs):
+    def fit_and_evaluate(self, epochs, batch_size):
         """Nani."""
         model = self.model.fit(self.train_x, self.train_y, batch_size=64,
                                epochs=epochs, verbose=0,
                                use_multiprocessing=True)
         history_train = model.history['loss']
 
-        _, acc = self.model.evaluate(self.test_x, self.test_y,
-                                     batch_size=64, verbose=0,
-                                     use_multiprocessing=True)
+        _, acc, f1_score, precision, recall = self.model.evaluate(self.test_x, self.test_y,
+                                                                  batch_size=batch_size, verbose=0,
+                                                                  use_multiprocessing=True)
         preds = self.model.predict(self.test_x, verbose=1,
                                    use_multiprocessing=True)
         preds = [int(round(pred[0])) for pred in preds]
@@ -106,7 +106,7 @@ class NeuralNetwork():
         self.log('Test Accuracy:' + str(acc))
         return {'acc': acc, 'loss': history_train,
                 'status': STATUS_OK, 'model': self.model,
-                'cm': conf_matrix}
+                'cm': conf_matrix, 'f1_score': f1_score, 'precision': precision, 'recall': recall}
 
     @staticmethod
     def log(message):

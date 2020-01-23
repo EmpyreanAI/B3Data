@@ -15,16 +15,15 @@ from hyperopt.plotting import main_plot_vars
 from hyperopt import base
 from keras import backend as K
 
-
 space = {
-    'batch_size': hp.choice('batch_size', [1, 2, 32, 64, 128, 256, 512]),
-    'cells': hp.choice('cells', [1]),
+    'batch_size': hp.choice('batch_size', [1, 2, 32, 64, 128, 256]),
+    'cells': hp.choice('cells', [1, 50, 80, 100, 150, 200]),
     'optimizers': hp.choice('optimizers', ['sgd','adam','rmsprop']),
-    'look_back_proportion': hp.choice('look_back_proportion', [12]),
+    'look_back_proportion': hp.choice('look_back_proportion', [1, 3, 6, 9, 12]),
     'nb_epochs' :  5000,
 }
 
-stocks = Stocks(year=2014, cod='ABEV3', period=5)
+stocks = Stocks(year=2014, cod=sys.argv[1], period=5)
 dataset = stocks.selected_fields([CLOSING])
 
 def label(dataset, look_back_proportion, mean_of=0):
@@ -70,26 +69,42 @@ def create_data_set(look_back_proportion):
 def objective(params):
     train_x, train_y, test_x, test_y, look_back = create_data_set(look_back_proportion=params['look_back_proportion'])
 
+    def recall_m(y_true, y_pred):
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+        recall = true_positives / (possible_positives + K.epsilon())
+        return recall
+
+    def precision_m(y_true, y_pred):
+            true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+            predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+            precision = true_positives / (predicted_positives + K.epsilon())
+            return precision
+
+    def f1_m(y_true, y_pred):
+        precision = precision_m(y_true, y_pred)
+        recall = recall_m(y_true, y_pred)
+        return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
     model = Sequential()
     model.add(LSTM(params['cells'], input_shape=(1, look_back)))
     model.add(Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy',
                   optimizer=params['optimizers'],
-                  metrics=['acc'])
+                  metrics=['acc',f1_m, precision_m, recall_m])
 
 
     model.fit(train_x, train_y, batch_size=params['batch_size'], epochs=params['nb_epochs'],
                    verbose=0, validation_split=0.33)
-    loss, acc = model.evaluate(test_x, test_y,
+    loss, acc, f1_score, precision, recall = model.evaluate(test_x, test_y,
                                  verbose=2)
 
     K.clear_session()
 
-    return {'loss': -acc, 'status': STATUS_OK }
-
+    return {'loss': -f1_score, 'status': STATUS_OK }
 
 trials = Trials()
-best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=100)
+best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=1000)
 df = pandas.DataFrame()
 trial_dict = {}
 for t in trials.trials:
@@ -100,7 +115,7 @@ for t in trials.trials:
 print (best)
 print (trials.best_trial)
 
-outname = 'hyperopt_100_ABEV3.csv'
+outname = 'hyperopt_100_' + sys.argv[1] + '.csv'
 outdir = '../results'
 if not os.path.exists(outdir):
     os.mkdir(outdir)
@@ -112,7 +127,7 @@ df.to_csv(fullname, mode='a')
 best_df = pandas.DataFrame()
 best_df = best_df.append(trials.best_trial, ignore_index=True)
 
-outname = 'best_trial_ABEV.csv'
+outname = 'best_trial_' + sys.argv[1] + '.csv'
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 

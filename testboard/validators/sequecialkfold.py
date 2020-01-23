@@ -14,9 +14,12 @@ class SequencialKFold():
         self.n_split = n_split
 
     # Tem que refatorar ainda
-    def split_and_fit(self, data, epochs, cells, look_back=12):
+    def split_and_fit(self, data=None, epochs=5000, look_back=12, cells=1,
+                      batch_size=1,
+                      optimizer='rmsprop'):
         """Nani."""
         acc_list = []
+        fscore_list = []
         loss_list = []
         conf_dict = [[], []]
 
@@ -34,10 +37,12 @@ class SequencialKFold():
                 self.log('DATA_SHAPE = ' + str(data_splited.shape))
                 del model
                 model = DenseLSTM(input_shape=data_splited.shape[1],
-                                  look_back=look_back, lstm_cells=cells)
+                                  look_back=look_back, lstm_cells=cells,
+                                  optimizer=optimizer)
                 model.create_data_for_fit(data_splited)
-                result = model.fit_and_evaluate(epochs=epochs)
+                result = model.fit_and_evaluate(epochs=epochs, batch_size=batch_size)
                 acc_list.append(result['acc'])
+                fscore_list.append(result['f1_score'])
                 loss_list.append(result['loss'])
                 conf_dict[0] += list(result['cm'][0])
                 conf_dict[1] += list(result['cm'][1])
@@ -45,7 +50,7 @@ class SequencialKFold():
 
             mean_list = np.mean(loss_list, axis=0)
 
-        return acc_list, mean_list, conf_dict
+        return acc_list, fscore_list, mean_list, conf_dict
 
     @staticmethod
     def log(message):
