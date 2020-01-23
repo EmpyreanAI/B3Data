@@ -10,8 +10,9 @@ space = {
     'look_back': ["1", "3", "6", "9", "12"],
 }
 
-df = pandas.read_csv('../results/hyperopt_100_VALE3.csv')
+df = pandas.read_csv('../results/hyperopt_100_ABEV3.csv')
 
+# import pdb; pdb.set_trace()
 cells = [space['cells'][int(df.iloc[i]['cells'][1])] for i in range(len(df[['cells']]))]
 batch_size = [space['batch_size'][int(df.iloc[i]['batch_size'][1])] for i in range(len(df[['batch_size']]))]
 look_back = [space['look_back'][int(df.iloc[i]['look_back'][1])] for i in range(len(df[['look_back']]))]
@@ -21,23 +22,23 @@ loss = [df.iloc[i]['loss'] for i in range(len(df[['optimizers']]))]
 
 ax = plt.subplot(2, 4, 1)
 ax.set_title('Cells')
-# plt.yticks(["1", "50", "80", "100", "150", "200"])
-plt.plot(df[['index']], cells, 'bo')
+bins = numpy.arange(7) - 0.5
+plt.hist(cells, bins=bins, ec='black')
 
 ax = plt.subplot(2, 4, 2)
 ax.set_title('batch_size')
-# plt.axis('normal')
-# plt.yticks([1, 2, 32, 64, 128, 256])
-plt.plot(df[['index']], batch_size, 'go')
+bins = numpy.arange(7) - 0.5
+plt.hist(batch_size, bins=bins, ec='black')
 
 ax = plt.subplot(2, 4, 3)
 ax.set_title('timesteps')
-# plt.axis('normal')
-plt.plot(df[['index']], look_back, 'ro')
-#
+bins = numpy.arange(6) - 0.5
+plt.hist(look_back, bins=bins, ec='black')
 ax = plt.subplot(2, 4, 4)
+
 ax.set_title('Optmizers')
-plt.plot(df[['index']], optimizers, 'yo')
+bins = numpy.arange(4) - 0.5
+plt.hist(optimizers, bins=bins, ec='black')
 
 avg = numpy.polyfit(df[['index']].squeeze().tolist(), df[['loss']].squeeze().tolist(), 1)
 poly = numpy.poly1d(avg)
