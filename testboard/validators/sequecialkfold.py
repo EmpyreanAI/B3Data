@@ -14,7 +14,7 @@ class SequencialKFold():
         self.n_split = n_split
 
     # Tem que refatorar ainda
-    def split_and_fit(self, data=None, epochs=5000, look_back=12, cells=1):
+    def split_and_fit(self, data, epochs, cells, look_back=12):
         """Nani."""
         acc_list = []
         loss_list = []
@@ -45,7 +45,7 @@ class SequencialKFold():
 
             mean_list = np.mean(loss_list, axis=0)
 
-        return acc_list, mean_list, conf_dict, look_back
+        return acc_list, mean_list, conf_dict
 
     @staticmethod
     def log(message):

@@ -5,7 +5,7 @@ from copy import copy
 
 from validators.sequecialkfold import SequencialKFold
 from data_mining.stocks import Stocks, CLOSING
-# from data_mining.stocks import VOLUME, OPENING
+from data_mining.stocks import VOLUME, OPENING
 from simulator.plotter import Plotter
 from data_mining.smote import duplicate_data
 
@@ -22,13 +22,13 @@ class Experimenter():
         #               MIN_PRICE, MEAN_PRICE, VOLUME]
         # self.fields = []
         # self.stocks = ['VALE3', 'PETR3', 'ABEV3']
-        self.stocks = ['PETR3', 'ABEV3', 'VALE3']
+        self.stocks = ['PETR3']
 
         # for i, _ in enumerate(all_fields):
         #     for subset in itertools.combinations(all_fields, i):
         #         if subset:
         #             self.fields.append(list(subset))
-        self.fields = [[CLOSING]]
+        self.fields = [[OPENING], [CLOSING], [VOLUME]]
 
     @staticmethod
     def gen_str_fields(field):
@@ -48,7 +48,7 @@ class Experimenter():
                     self.log("Stock: %s; Year: %s; Fields: %s"
                              % (stock, str(year), s_field))
                     res = self.execute_experiment(year, stock, copy(field))
-                    data_acc, data_loss, conf_mats, data_amts = res
+                    data_acc, data_loss, conf_mats = res
                     look_backs = [1, 3, 6, 9, 12]
                     for conf_mat, lb in zip(conf_mats, look_backs):
                         self.plotter.plot_confusion_matrix(conf_mat[0],
@@ -56,7 +56,7 @@ class Experimenter():
                                                            stock, year,
                                                            s_field, lb)
                     self.plotter.loss_acc_plot(data_acc, data_loss,
-                                               stock, year, s_field, data_amts)
+                                               stock, year, s_field)
                     gc.collect()
 
     @staticmethod
@@ -65,7 +65,6 @@ class Experimenter():
         results_acc = []
         results_loss = []
         conf_mats = []
-        data_amts = []
 
         stocks = Stocks(year=year, cod=stock, period=5)
         dataset = stocks.selected_fields(fields)
@@ -73,15 +72,16 @@ class Experimenter():
         sequencial_kfold = SequencialKFold(n_split=6)
         for i in [1, 3, 6, 9, 12]:
             acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
+                                                                 epochs=5000,
+                                                                 cells=50,
                                                                  look_back=i)
 
             # This need fixing.
-            data_amts.append(data_amt)
             results_acc.append(acc)
             results_loss.append(loss)
             conf_mats.append(conf_mat)
 
-        return results_acc, results_loss, conf_mats, data_amts
+        return results_acc, results_loss, conf_mats
 
     @staticmethod
     def log(message):

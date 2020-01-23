@@ -19,8 +19,8 @@ class Plotter():
         ax_plot.set_xlabel('Window Size', **hfont)
         ax_plot.set_ylabel('Accuracy', **hfont)
         bplot = ax_plot.boxplot(data, patch_artist=True, sym='.')
-        ax_plot.set_xticklabels(['25%', '50%', '75%', '100%'])
-        colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
+        ax_plot.set_xticklabels([1, 3, 6, 9, 12])
+        colors = ['#A0D1CA', '#40C1AC', '#00A3AD', '#007398', '#005A6F']
 
         for patch, color in zip(bplot['boxes'], colors):
             patch.set_facecolor(color)
@@ -41,7 +41,7 @@ class Plotter():
         ax_plot.set_ylabel('Accuracy', **hfont)
         bplot = ax_plot.boxplot(data, patch_artist=True, sym='.')
         ax_plot.set_xticklabels(['1', '50', '80', '100', '150', '200'])
-        colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E', '#21370F']
+        colors = ['#A0D1CA', '#40C1AC', '#00A3AD', '#007398', '#005A6F']
 
         for patch, color in zip(bplot['boxes'], colors):
             patch.set_facecolor(color)
@@ -58,7 +58,7 @@ class Plotter():
         """Nani."""
         fig, ax_plot = plt.subplots()
         hfont = {'fontname': 'monospace'}
-        colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
+        colors = ['#A0D1CA', '#40C1AC', '#00A3AD', '#007398', '#005A6F']
         ax_plot.set_title("{}-{}".format(stock, year), **hfont)
         ax_plot.set_xlabel('Epoch', **hfont)
         ax_plot.set_ylabel('Loss', **hfont)
@@ -67,12 +67,12 @@ class Plotter():
         plt.show()
 
     @staticmethod
-    def loss_acc_plot(acc, loss, stock, year, features, data_amt):
+    def loss_acc_plot(acc, loss, stock, year, features):
         """Nani."""
         fig1, ax1 = plt.subplots()  # figsize=(20, 10)
         hfont = {'fontname': 'monospace'}
-        colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
-        lines = [':', '-.', '--', '-']
+        colors = ['#A0D1CA', '#40C1AC', '#00A3AD', '#007398', '#005A6F']
+        lines = [(0, (1, 10)),':', '-.', '--', '-', '-']
         ax1.set_title("{}-{}".format(stock, year), **hfont)
         ax1.set_xlabel('Epoch', **hfont)
         ax1.set_ylabel('Loss', **hfont)
@@ -84,10 +84,8 @@ class Plotter():
         ax2.set_xlabel('Window Size', **hfont)
         ax2.set_ylabel('Accuracy', **hfont)
 
-        print(data_amt)
         bplot = ax2.boxplot(acc, patch_artist=True, sym='.')
-        ax2.set_xticklabels(data_amt)
-        colors = ['#52D2BC', '#309B8A', '#2460A7', '#21366E']
+        ax2.set_xticklabels([1, 3, 6, 9, 12])
         for patch, color, line in zip(bplot['boxes'], colors, lines):
             patch.set_linestyle(line)
             patch.set_facecolor(color)
