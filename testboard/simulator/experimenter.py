@@ -22,13 +22,13 @@ class Experimenter():
         #               MIN_PRICE, MEAN_PRICE, VOLUME]
         # self.fields = []
         # self.stocks = ['VALE3', 'PETR3', 'ABEV3']
-        self.stocks = ['PETR3']
+        self.stocks = ['ABEV3']
 
         # for i, _ in enumerate(all_fields):
         #     for subset in itertools.combinations(all_fields, i):
         #         if subset:
         #             self.fields.append(list(subset))
-        self.fields = [[OPENING], [CLOSING], [VOLUME]]
+        self.fields = [[CLOSING]]
 
     @staticmethod
     def gen_str_fields(field):
@@ -48,7 +48,7 @@ class Experimenter():
                     self.log("Stock: %s; Year: %s; Fields: %s"
                              % (stock, str(year), s_field))
                     res = self.execute_experiment(year, stock, copy(field))
-                    data_acc, data_loss, conf_mats = res
+                    data_acc, data_fscore, data_loss, conf_mats = res
                     look_backs = [1, 3, 6, 9, 12]
                     for conf_mat, lb in zip(conf_mats, look_backs):
                         self.plotter.plot_confusion_matrix(conf_mat[0],
@@ -63,6 +63,7 @@ class Experimenter():
     def execute_experiment(year, stock, fields):
         """Nani."""
         results_acc = []
+        results_f1_score = []
         results_loss = []
         conf_mats = []
 
@@ -71,17 +72,18 @@ class Experimenter():
         dataset = duplicate_data(dataset)
         sequencial_kfold = SequencialKFold(n_split=6)
         for i in [1, 3, 6, 9, 12]:
-            acc, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
-                                                                 epochs=5000,
-                                                                 cells=50,
-                                                                 look_back=i)
+            acc, f1_score, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
+                                           epochs=5000,
+                                           cells=50,
+                                           look_back=i)
 
             # This need fixing.
             results_acc.append(acc)
+            results_f1_score.append(f1_score)
             results_loss.append(loss)
             conf_mats.append(conf_mat)
 
-        return results_acc, results_loss, conf_mats
+        return results_acc,results_f1_score, results_loss, conf_mats
 
     @staticmethod
     def log(message):
