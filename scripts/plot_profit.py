@@ -9,14 +9,17 @@ from data_mining.stocks import Stocks
 from testboard.data_mining.smote import duplicate_data
 from data_mining.stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRICE, VOLUME
 
-stocks = Stocks(year=2014, cod='PETR3', period=5)
+stocks = Stocks(year=2014, cod='VALE3', period=11)
 dataset = stocks.selected_fields([CLOSING])
 dataset = duplicate_data(dataset)
 
 model = DenseLSTM(input_shape=dataset.shape[1],
-                  look_back=6, lstm_cells=50)
+                  look_back=6, lstm_cells=150, optimizer='rmsprop')
 model.create_data_for_fit(dataset)
-model.fit_and_evaluate(epochs=5000)
+model.fit_and_evaluate(batch_size=2, epochs=5000)
+
+model.model.save("VALE3-model.h5")
+print("Saved VALE3 model to disk")
 
 prediction = model.model.predict(model.test_x)
 prediction_labels = [1 if Decimal(i.item()) >= Decimal(0.50) else 0 for i in prediction]
