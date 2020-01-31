@@ -14,7 +14,7 @@ from tqdm import tqdm
 from copy import copy
 
 plotter = Plotter()
-cells = [50, 80, 100, 150, 200]
+cells = [1, 50, 80, 100, 150, 200]
 fields = [CLOSING]
 
 
@@ -61,7 +61,7 @@ def run():
     fullname = os.path.join(outdir, outname)
     fullname_f1_score = os.path.join(outdir, outname_f1_score)
     df.to_csv(fullname, mode='a')
-    df.to_csv(fullname_f1_score, mode='a')
+    df_f1_score.to_csv(fullname_f1_score, mode='a')
 
     return results_acc
 
