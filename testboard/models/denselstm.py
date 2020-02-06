@@ -19,7 +19,7 @@ class DenseLSTM(NeuralNetwork):
         """Nani."""
         self.look_back = look_back
         self.dense = dense
-        self.lstm_cells = 300
+        self.lstm_cells = lstm_cells
         self.input_shape = input_shape
         self.optimizer = optimizer
         super(DenseLSTM, self).__init__()
