@@ -17,12 +17,11 @@ dataset = duplicate_data(dataset)
 model = DenseLSTM(input_shape=dataset.shape[1],
                   look_back=6, lstm_cells=150, optimizer='rmsprop')
 model.create_data_for_fit(dataset)
-model.fit_and_evaluate(batch_size=2, epochs=5000)
+result = model.fit_and_evaluate(batch_size=2, epochs=5000)
 
 model.model.save("VALE3-model.h5")
 print("Saved VALE3 model to disk")
 
-acc = model.fit_and_evaluate(5000, 2)['acc']
 print(acc)
 prediction = model.model.predict(model.test_x)
 prediction_labels = [1 if Decimal(i.item()) >= Decimal(0.50) else 0 for i in prediction]
@@ -41,7 +40,7 @@ for i in range(len(x)-1):
     else:
         l = plt.scatter(x[i], y[i], marker='v', c='red')
 
-plt.legend((h,l), ("Possible higher price in the next day", "Possible lower price in the next day"))
+plt.legend((h,l), ("Possible higher price in the next day", "Possible lower price in the next day"), fontsize=8)
 
 plt.plot(dataset)
 plt.show()
