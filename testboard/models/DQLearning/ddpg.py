@@ -30,12 +30,13 @@ for cod in ['VALE3', 'PETR3', 'ABEV3']:
     stock_prices = stock.selected_fields([CLOSING])
     stock_prices = stock_prices.reshape(1, len(stock_prices))[0]
     stock_preds = [1 if stock_prices[i+1] >= stock_prices[i] else 0 for i in range(len(stock_prices)-1)]
+    stock_prices = stock_prices[:-1]
     prices.append(stock_prices)
     preds.append(stock_preds)
 
 # Get the environment and extract the number of actions.
 
-env = gym.make('MarketEnv-v0', n_insiders=3, start_money=1000,
+env = gym.make('MarketEnv-v0', n_insiders=3, start_money=10000,
                 assets_prices=prices, insiders_preds=preds)
 
 np.random.seed(123)
