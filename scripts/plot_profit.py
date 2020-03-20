@@ -11,7 +11,7 @@ from data_mining.stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRIC
 from sklearn.metrics import confusion_matrix
 from matplotlib.patches import Rectangle
 
-stocks = Stocks(year=2014, cod='PETR3', period=5)
+stocks = Stocks(year=2014, cod='ABEV3', period=5)
 dataset = stocks.selected_fields([CLOSING])
 dataset = duplicate_data(dataset)
 
@@ -26,6 +26,7 @@ print("Saved ABEV3 model to disk")
 prediction = model.model.predict(model.test_x)
 prediction_labels = [1 if Decimal(i.item()) >= Decimal(0.50) else 0 for i in prediction]
 
+avarange_dataset = [np.mean(dataset[i:i+9]) for i in range(len(dataset))]
 begin_test = int(len(dataset) - len(model.test_x))
 correct_labels = [1 if dataset[i+1] >= dataset[i] else 0 for i in range(begin_test, len(dataset)-1)]
 print(correct_labels)
@@ -33,7 +34,7 @@ x = list(range(begin_test, len(dataset)))
 y = dataset[begin_test:len(dataset)]
 plt.ylabel("Daily Quotation Price")
 plt.xlabel("Days")
-plt.title('ABEV3')
+plt.title("ABEV3")
 score = 0
 for i in range(len(x)-1):
     if prediction_labels[i] == 1:
@@ -45,15 +46,19 @@ for i in range(len(x)-1):
     else:
         if prediction_labels[i] == correct_labels[i]:
             l = plt.scatter(x[i], y[i], marker='v', c='red')
+            score += 1
         else:
             lx = plt.scatter(x[i], y[i], marker='x', c='red')
 
+d_label, = plt.plot(dataset)
+# a_label, = plt.plot(avarange_dataset, 'o')
+
 extra = Rectangle((0, 0), 1, 1, fc="w", fill=False, edgecolor='none', linewidth=0)
-plt.legend((h,l,hx,lx,extra), ("Correct higher price predicted",
+plt.legend((h,l,hx,lx,extra, d_label), ("Correct higher price predicted",
                                "Correct lowe price predicted",
                                "Incorrect higher price predicted",
                                "Incorrect lower price predicted",
-                               "Accuracy: {}%".format(round(score/(len(x)-1), 2)*100)), fontsize=8)
+                               "Accuracy: {}%".format(round(score/(len(x)-1), 2)*100),
+                               "Real Stock Price"), fontsize=6)
 
-plt.plot(dataset)
 plt.show()
