@@ -73,8 +73,8 @@ memory = SequentialMemory(limit=100000, window_length=1)
 random_process = OrnsteinUhlenbeckProcess(size=nb_actions, theta=.15, mu=0., sigma=.3)
 agent = DDPGAgent(nb_actions=nb_actions, actor=actor, critic=critic,
                   critic_action_input=action_input,
-                  memory=memory, nb_steps_warmup_critic=100,
-                  nb_steps_warmup_actor=100,
+                  memory=memory, nb_steps_warmup_critic=50,
+                  nb_steps_warmup_actor=50,
                   random_process=random_process, gamma=.99,
                   target_model_update=1e-3)
 agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
