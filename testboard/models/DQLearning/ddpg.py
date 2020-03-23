@@ -1,42 +1,43 @@
 import sys
 sys.path.append('../../')
+sys.path.append('../')
 # Necessário para importar os módulos
 
 import numpy as np
 import gym
 import gym_market
 
+import datetime
 
 from keras.models import Sequential, Model
 from keras.layers import Dense, Activation, Flatten, Input, Concatenate
 from keras.optimizers import Adam
 
+import tensorflow as tf
+from tensorflow import keras
+
 from rl.agents import DDPGAgent
 from rl.memory import SequentialMemory
 from rl.random import OrnsteinUhlenbeckProcess
 
-from data_mining.stocks import Stocks, CLOSING
+from helpers.ddpg_input import DDPGInput
 
 ENV_NAME = 'market-v0'
 
 # prices = [[1,2,3,4,3,2,1,2,3,5,1,2,4], [2,1,2,3,5,1,2,1,2,3,4,3,2], [2,3,4,3,2,1,2,3,5,1,2,1,3]]
 # preds = [[1,1,1,0,0,0,1,1,1,0,1,1,0], [0,1,1,1,0,1,0,1,1,1,0,0,0], [1,1,0,0,0,1,1,1,0,1,0,1,0]]
 
-prices = []
-preds = []
+ddpginput = DDPGInput(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
 
-for cod in ['VALE3', 'PETR3', 'ABEV3']:
-    stock = Stocks(year=2014, cod=cod, period=5)
-    stock_prices = stock.selected_fields([CLOSING])
-    stock_prices = stock_prices.reshape(1, len(stock_prices))[0]
-    stock_preds = [1 if stock_prices[i+1] >= stock_prices[i] else 0 for i in range(len(stock_prices)-1)]
-    stock_prices = stock_prices[:-1]
-    prices.append(stock_prices)
-    preds.append(stock_preds)
+prices, preds = ddpginput.prices_preds()
 
 # Get the environment and extract the number of actions.
 
-env = gym.make('MarketEnv-v0', n_insiders=3, start_money=10000,
+log_dir = "../../../results/logdir/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir)
+
+env = gym.make('MarketEnv-v0', n_insiders=3, start_money=1000,
                 assets_prices=prices, insiders_preds=preds)
 
 np.random.seed(123)
@@ -77,7 +78,7 @@ agent = DDPGAgent(nb_actions=nb_actions, actor=actor, critic=critic,
                   random_process=random_process, gamma=.99,
                   target_model_update=1e-3)
 agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
-agent.fit(env, nb_steps=50000, verbose=2, nb_max_episode_steps=200)
+agent.fit(env, nb_steps=50000, verbose=2, nb_max_episode_steps=200, callbacks=[tensorboard_callback])
 
 # After training is done, we save the final weights.
 agent.save_weights('ddpg_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
