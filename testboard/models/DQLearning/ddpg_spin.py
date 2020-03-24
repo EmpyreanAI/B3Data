@@ -8,7 +8,6 @@ import datetime
 import numpy as np
 from spinup import ddpg_tf1
 from tensorflow import keras
-from spinup import ppo_pytorch
 from helpers.ddpg_input import DDPGInput
 from spinup.utils.run_utils import ExperimentGrid
 
@@ -37,9 +36,14 @@ tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir)
 # nb_actions = env.action_space.shape[0]
 eg = ExperimentGrid(name='ddpg-tf1-bench')
 eg.add('env_fn', env_fn, '', True)
-# eg.add('seed', [10*i for i in range(args.num_runs)])
-eg.add('epochs', 10)
+eg.add('seed', [7*i for i in range(5)])
+eg.add('epochs', 5)
 eg.add('steps_per_epoch', 4000)
+eg.add('pi_lr', [0.001, 0.01, 0.1])
+eg.add('q_lr', [0.001, 0.01, 0.1])
+eg.add('batch_size', [16, 32])
+eg.add('start_steps', [25, 50, 100, 10000])
+
 # eg.add('ac_kwargs:hidden_sizes', [(32,), (64,64)], 'hid')
 # eg.add('ac_kwargs:activation', [tf.tanh, tf.nn.relu], '')
 eg.run(ddpg_tf1, num_cpu=1)
