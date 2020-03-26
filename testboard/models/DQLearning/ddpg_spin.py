@@ -10,7 +10,7 @@ from spinup import ddpg_tf1
 from tensorflow import keras
 from helpers.ddpg_input import DDPGInput
 from spinup.utils.run_utils import ExperimentGrid
-
+import tensorflow as tf
 
 def env_fn():
     import gym_market
@@ -45,5 +45,5 @@ eg.add('batch_size', [16, 32])
 eg.add('start_steps', [25, 50, 100, 10000])
 
 # eg.add('ac_kwargs:hidden_sizes', [(32,), (64,64)], 'hid')
-# eg.add('ac_kwargs:activation', [tf.tanh, tf.nn.relu], '')
-eg.run(ddpg_tf1, num_cpu=1)
+eg.add('ac_kwargs:activation', [tf.tanh, tf.tanh], '')
+eg.run(ddpg_tf1, num_cpu=8)
