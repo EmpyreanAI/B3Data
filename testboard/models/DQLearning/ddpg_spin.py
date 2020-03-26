@@ -29,7 +29,7 @@ prices, preds = ddpginput.prices_preds()
 log_dir = "../../../results/logdir/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
 tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir)
-#
+
 # env = gym.make('MarketEnv-v0', n_insiders=3, start_money=1000,
 #                assets_prices=prices, insiders_preds=preds)
 #
@@ -38,7 +38,7 @@ eg = ExperimentGrid(name='ddpg-tf1-bench')
 eg.add('env_fn', env_fn, '', True)
 eg.add('seed', [7*i for i in range(5)])
 eg.add('epochs', 5)
-eg.add('steps_per_epoch', 4000)
+eg.add('steps_per_epoch', 111)
 eg.add('pi_lr', [0.001, 0.01, 0.1])
 eg.add('q_lr', [0.001, 0.01, 0.1])
 eg.add('batch_size', [16, 32])
