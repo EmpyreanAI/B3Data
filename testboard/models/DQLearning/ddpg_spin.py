@@ -47,7 +47,7 @@ eg.add('epochs', 100)
 """Fator de desconto, mais perto de zero mais poder para recomensas atuais
 mais perto de um mais prioridade pra recomensas futuras."""
 # eg.add('gamma', 0.99)
-# eg.add('polyak', 0.3)
+# eg.add('polyak', 0.995)
 
 """Taxa de aprendizagem da politica (ator)."""
 eg.add('pi_lr', 0.001)
@@ -77,7 +77,7 @@ utiliza max ep pra encerrar."""
 """Frequencia em que o modelo e salvo no arquivo em epoca."""
 # eg.add('save_freq', 3)
 
-eg.add('ac_kwargs:activation', tf.tanh, '')
-
-# eg.add('ac_kwargs:hidden_sizes', [(32,), (64,64)], 'hid')
+eg.add('ac_kwargs:activation', tf.tanh)
+eg.add('ac_kwargs:output_activation', tf.tanh)
+# eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
 eg.run(ddpg_tf1, num_cpu=1)
