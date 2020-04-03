@@ -61,14 +61,13 @@ class Stocks():
                          start_month=1,
                          period=5):
         print('Paciência é uma benção')
-        quotations = []
+        quotations = numpy.array([])
         for year in range(start_year, end_year+1):
-            quotations.extend(Stocks(cod,
-                                     year,
-                                     start_month,
-                                     period).selected_fields([CLOSING]))
+            stocks = Stocks(cod, year, start_month, period).selected_fields([CLOSING])
+            for price in stocks:
+                quotations = numpy.append(quotations, price)
 
-        return numpy.array(quotations)
+        return quotations
 
     @staticmethod
     def log(message):
