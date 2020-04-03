@@ -21,8 +21,9 @@ class DDPGInput(object):
 
             stock = Stocks(year=year, cod=cod, period=period)
             s_prices = stock.selected_fields([CLOSING])
+
             s_prices = s_prices.reshape(1, len(s_prices))[0]
-            s_preds = [1 if s_prices[i+1] >= s_prices[:i-win].mean() else 0 for i in range(win, len(s_prices)-1)]
+            s_preds = [1 if s_prices[i] >= s_prices[i-win:i].mean() else 0 for i in range(win, len(s_prices))]
             s_prices = s_prices[win:]
             small_dataset = min(small_dataset, len(s_prices))
             prices.append(s_prices)
