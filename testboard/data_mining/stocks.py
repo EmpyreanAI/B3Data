@@ -58,8 +58,7 @@ class Stocks():
 
     @staticmethod
     def interval_of_years(cod='PETR3', start_year=2014, end_year=2014,
-                         start_month=1,
-                         period=5):
+                          start_month=1, period=5):
         quotations = numpy.array([])
         for year in range(start_year, end_year+1):
             stocks = Stocks(cod, year, start_month, period).selected_fields([CLOSING])
