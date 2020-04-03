@@ -26,6 +26,9 @@ def env_fn():
 stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
 prices, preds = stockutil.prices_preds()
 
+print(prices)
+print(preds)
+
 # Get the environment and extract the number of actions.
 log_dir = "../../../results/logdir/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
