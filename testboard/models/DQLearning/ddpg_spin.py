@@ -29,6 +29,9 @@ prices, preds = stockutil.prices_preds(start_year=2000, end_year=2013, period=6)
 print(len(prices[0]))
 print(len(preds[0]))
 
+print(prices)
+print(preds)
+
 # Get the environment and extract the number of actions.
 log_dir = "../../../results/logdir/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 

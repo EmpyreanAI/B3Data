@@ -10,7 +10,7 @@ class StockUtil(object):
         self.stocks = stocks
         self.windows = windows
 
-    def prices_preds(self, start_year=2014, end_year=2014, period=5):
+    def prices_preds(self, start_year=2014, end_year=2016, period=11):
 
         small_dataset = float('inf')
         prices = []
@@ -20,8 +20,7 @@ class StockUtil(object):
             cod = self.stocks[i]
             win = self.windows[i]
 
-            s_prices = Stocks.interval_of_years(cod, start_year, end_year, 1, period)
-
+            s_prices = Stocks.interval_of_years(cod, start_year, end_year, 1, period=period)
             s_prices = s_prices.reshape(1, len(s_prices))[0]
             s_preds = [1 if s_prices[i] >= s_prices[i-win:i].mean() else 0 for i in range(win, len(s_prices))]
             s_prices = s_prices[win:]
