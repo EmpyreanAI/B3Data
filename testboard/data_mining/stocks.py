@@ -58,9 +58,8 @@ class Stocks():
 
     @staticmethod
     def interval_of_years(cod='PETR3', start_year=2014, end_year=2014,
-                         start_month=1,
-                         period=5):
-        print('Paciência é uma benção')
+                          start_month=1,
+                          period=5):
         quotations = []
         for year in range(start_year, end_year+1):
             quotations.extend(Stocks(cod,
