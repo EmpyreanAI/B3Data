@@ -48,7 +48,7 @@ def label(dataset, look_back_proportion, mean_of=0):
 
 def create_data_set(look_back_proportion):
 
-    train_proportion = 0.33
+    train_proportion = 0.7
     data_x, data_y, look_back = label(dataset, look_back_proportion)
     train_size = int(len(dataset) * train_proportion)
 

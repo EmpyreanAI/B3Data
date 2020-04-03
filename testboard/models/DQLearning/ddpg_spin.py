@@ -9,7 +9,7 @@ import numpy as np
 from spinup import ddpg_tf1
 from spinup import sac_tf1
 from tensorflow import keras
-from helpers.ddpg_input import DDPGInput
+from data_mining.helpers.stock_util import StockUtil
 from spinup.utils.run_utils import ExperimentGrid
 import tensorflow as tf
 
@@ -23,8 +23,8 @@ def env_fn():
 # from keras.optimizers import Adam
 # import tensorflow as tf
 
-ddpginput = DDPGInput(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
-prices, preds = ddpginput.prices_preds()
+stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
+prices, preds = stockutil.prices_preds()
 
 # Get the environment and extract the number of actions.
 log_dir = "../../../results/logdir/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")

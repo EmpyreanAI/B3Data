@@ -58,6 +58,6 @@ class DenseLSTM(NeuralNetwork):
                       optimizer=self.optimizer,
                       metrics=['accuracy', f1_m, precision_m, recall_m])
 
-        model.summary()
+        # model.summary()
 
         return model
