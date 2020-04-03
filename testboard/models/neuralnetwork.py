@@ -38,7 +38,7 @@ class NeuralNetwork():
         """Nani."""
         self.look_back = value
 
-    def create_data_for_fit(self, dataset, train_proportion=0.66):
+    def create_data_for_fit(self, dataset, train_proportion=0.7):
         """Create the labels and reshape data for fit.
 
         Create the labels and reshape data according to parameters of
