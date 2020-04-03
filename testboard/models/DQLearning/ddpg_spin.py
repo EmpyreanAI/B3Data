@@ -24,7 +24,10 @@ def env_fn():
 # import tensorflow as tf
 
 stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
-prices, preds = stockutil.prices_preds()
+prices, preds = stockutil.prices_preds(start_year=2000, end_year=2013, period=6)
+
+print(len(prices[0]))
+print(len(preds[0]))
 
 print(prices)
 print(preds)
@@ -45,33 +48,32 @@ eg.add('seed', 7)
 """Passos por epoca."""
 # eg.add('steps_per_epoch', 5000)
 """Quantidade de epocas."""
-eg.add('epochs', 100)
-# eg.add('replay_size', 1000)
+# eg.add('epochs', 3)
+# eg.add('replay_size', 5000)
 """Fator de desconto, mais perto de zero mais poder para recomensas atuais
 mais perto de um mais prioridade pra recomensas futuras."""
-# eg.add('gamma', 0.99)
-# eg.add('polyak', 0.3)
-
+# eg.add('gamma', 0.7)
+# eg.add('polyak', 0.995)
 """Taxa de aprendizagem da politica (ator)."""
-eg.add('pi_lr', 0.001)
+# eg.add('pi_lr', 0.001)
 """Taxa de aprendizagem do valor Q (critico)."""
-eg.add('q_lr', 0.001)
+# eg.add('q_lr', 0.001)
 """Quantidade de informacoes que é passada de uma só vez."""
-# eg.add('batch_size', 100)
+# eg.add('batch_size', 9)
 """
 Enquanto o passo for menor que o valor (independe da epoca) acoes aleatorias.
 serao realizadas por motivos exploratorios
 """
-eg.add('start_steps', 10000)
+# eg.add('start_steps', 5000)
 """Updates atualizam: LossQ, QVals, LossPi."""
 """Quantas passos esperar antes de comecar a
 atualizar o gradientes descendente."""
-# eg.add('update_after', 700)
+# eg.add('update_after', 2500)
 """De quanto em quantos passos atualizar o gradiente, sem perder ratio."""
 # eg.add('update_every', 50)
 """Apos start_steps algoritmo usa a politica, mas
 exploracoes sao feitas via ruido."""
-# eg.add('act_noise', 0.4)
+# eg.add('act_noise', 0.1)
 """Numero de episodios de teste."""
 # eg.add('num_test_episodes', 10)
 """Caso o ambiente possa ficar perdido no episodio,
@@ -80,7 +82,7 @@ utiliza max ep pra encerrar."""
 """Frequencia em que o modelo e salvo no arquivo em epoca."""
 # eg.add('save_freq', 3)
 
-eg.add('ac_kwargs:activation', tf.tanh, '')
-
-# eg.add('ac_kwargs:hidden_sizes', [(32,), (64,64)], 'hid')
+eg.add('ac_kwargs:activation', tf.tanh)
+# eg.add('ac_kwargs:output_activation', tf.tanh)
+# eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
 eg.run(ddpg_tf1, num_cpu=1)
