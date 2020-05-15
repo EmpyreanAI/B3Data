@@ -24,7 +24,7 @@ def env_fn():
 # import tensorflow as tf
 
 stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
-prices, preds = stockutil.prices_preds(start_year=2014, end_year=2014, period=5)
+prices, preds = stockutil.prices_preds(start_year=2014, end_year=2014, period=11)
 
 print(len(prices[0]))
 print(len(preds[0]))
@@ -41,7 +41,7 @@ tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir)
 """Tamanho do experimento = epocas*passos por epoca."""
 eg = ExperimentGrid(name='ddpg-tf1-bench')
 eg.add('env_fn', env_fn, '', True)
-eg.add('seed', 7)
+eg.add('seed', 41)
 """Passos por epoca."""
 # eg.add('steps_per_epoch', 5000)
 """Quantidade de epocas."""
@@ -80,6 +80,6 @@ utiliza max ep pra encerrar."""
 # eg.add('save_freq', 3)
 
 eg.add('ac_kwargs:activation', tf.tanh)
-# eg.add('ac_kwargs:output_activation', tf.tanh)
+eg.add('ac_kwargs:output_activation', tf.tanh)
 # eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
 eg.run(ddpg_tf1, num_cpu=1)
