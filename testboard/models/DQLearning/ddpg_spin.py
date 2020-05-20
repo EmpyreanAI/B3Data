@@ -38,8 +38,8 @@ eg.add('seed', 21)
 """Passos por epoca."""
 # eg.add('steps_per_epoch', 5000)
 """Quantidade de epocas."""
-eg.add('epochs', 1000)
-eg.add('replay_size', int(1e8))
+# eg.add('epochs', 1000)
+# eg.add('replay_size', int(1e8))
 """Fator de desconto, mais perto de zero mais poder para recomensas atuais
 mais perto de um mais prioridade pra recomensas futuras."""
 # eg.add('gamma', 0.99)
@@ -54,7 +54,7 @@ mais perto de um mais prioridade pra recomensas futuras."""
 Enquanto o passo for menor que o valor (independe da epoca) acoes aleatorias.
 serao realizadas por motivos exploratorios
 """
-eg.add('start_steps', 100000)
+# eg.add('start_steps', 100000)
 """Updates atualizam: LossQ, QVals, LossPi."""
 """Quantas passos esperar antes de comecar a
 atualizar o gradientes descendente."""
