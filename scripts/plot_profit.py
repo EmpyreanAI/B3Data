@@ -11,14 +11,14 @@ from data_mining.stocks import CLOSING, OPENING, MAX_PRICE, MIN_PRICE, MEAN_PRIC
 from sklearn.metrics import confusion_matrix
 from matplotlib.patches import Rectangle
 
-stocks = Stocks(year=2014, cod='ABEV3', period=5)
+stocks = Stocks(year=2014, cod='VALE3', period=5)
 dataset = stocks.selected_fields([CLOSING])
 dataset = duplicate_data(dataset)
 
 model = DenseLSTM(input_shape=dataset.shape[1],
-                  look_back=9, lstm_cells=100, optimizer='rmsprop')
+                  look_back=6, lstm_cells=50, optimizer='rmsprop')
 model.create_data_for_fit(dataset)
-result = model.fit_and_evaluate(batch_size=128, epochs=5000)
+result = model.fit_and_evaluate(batch_size=2, epochs=5000)
 
 model.model.save("ABEV3-model.h5")
 print("Saved ABEV3 model to disk")

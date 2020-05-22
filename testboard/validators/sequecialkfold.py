@@ -1,4 +1,6 @@
 """Nani."""
+import sys
+sys.path.append('../testboard')
 
 from models.denselstm import DenseLSTM
 
@@ -36,6 +38,7 @@ class SequencialKFold():
                 self.log('Data_Size = ' + str(int(len(data_splited))))
                 self.log('DATA_SHAPE = ' + str(data_splited.shape))
                 del model
+                print(data_splited)
                 model = DenseLSTM(input_shape=data_splited.shape[1],
                                   look_back=look_back, lstm_cells=cells,
                                   optimizer=optimizer)

@@ -24,7 +24,7 @@ def env_fn():
 # import tensorflow as tf
 
 stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
-prices, preds = stockutil.prices_preds(start_year=2014, end_year=2014, period=5)
+prices, preds = stockutil.prices_preds(start_year=2012, end_year=2016, period=11)
 
 print(len(prices[0]))
 print(len(preds[0]))
