@@ -76,4 +76,4 @@ eg.add('ac_kwargs:activation', tf.tanh)
 eg.add('ac_kwargs:output_activation', tf.tanh)
 # eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
 
-eg.run(ddpg_tf1, num_cpu=6)
+eg.run(ddpg_tf1, num_cpu=1)

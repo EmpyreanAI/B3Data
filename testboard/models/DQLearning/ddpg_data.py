@@ -21,7 +21,7 @@ def get_last_train():
     columns = open(last_train).readlines()[0].split('\t')
 
     for i in columns:
-        result[i] = [i]
+        result[i] = []
 
     for line in open(last_train).readlines()[1:]:
         for i, value in enumerate(line.split('\t')):
