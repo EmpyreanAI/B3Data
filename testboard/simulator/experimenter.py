@@ -4,8 +4,6 @@ import gc
 from copy import copy
 
 from validators.sequecialkfold import SequencialKFold
-from data_mining.stocks import Stocks, CLOSING
-from data_mining.stocks import VOLUME, OPENING
 from simulator.plotter import Plotter
 from data_mining.smote import duplicate_data
 
@@ -75,11 +73,11 @@ class Experimenter():
         sequencial_kfold = SequencialKFold(n_split=6)
         for i in [1, 3, 6, 9, 12]:
             acc, f1_score, loss, conf_mat = sequencial_kfold.split_and_fit(data=dataset,
-                                           epochs=5000,
-                                           cells=self.cells,
-                                           look_back=i,
-                                           batch_size=self.batch_size,
-                                           optimizer=self.optimizer)
+                                                                           epochs=5000,
+                                                                           cells=self.cells,
+                                                                           look_back=i,
+                                                                           batch_size=self.batch_size,
+                                                                           optimizer=self.optimizer)
 
             # This need fixing.
             results_acc.append(acc)

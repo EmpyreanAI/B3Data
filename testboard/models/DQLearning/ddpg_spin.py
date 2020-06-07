@@ -15,9 +15,9 @@ import tensorflow as tf
 
 def env_fn():
     import gym_market
-    return gym.make('MarketEnv-v0', n_insiders=3, start_money=1000,
-                    assets_prices=prices, insiders_preds=preds)
 
+    return gym.make('MarketEnv-v0', n_insiders=2, start_money=10000,
+                    assets_prices=prices, insiders_preds=preds)
 # from keras.models import Sequential, Model
 # from keras.layers import Dense, Activation, Flatten, Input, Concatenate
 # from keras.optimizers import Adam
@@ -27,15 +27,15 @@ stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
 prices, preds = stockutil.prices_preds(start_year=2014,
                                        end_year=2014, period=11)
 
-# Get the environment and extract the number of actions.
-log_dir = "../../../results/logdir/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+# x_values = np.arange(start=0, stop=6, step=0.005)
+# prices = [[round((x**3 - 8*x**2 + 16*x + 12), 2) for x in x_values]]
 
-tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir)
+# preds = [[1 if prices[0][i+1] >= prices[0][i] else 0 for i in range(len(prices[0])-1)]]
 
 """Tamanho do experimento = epocas*passos por epoca."""
 eg = ExperimentGrid(name='ddpg-tf1-bench')
 eg.add('env_fn', env_fn, '', True)
-eg.add('seed', 21)
+eg.add('seed', 9)
 """Passos por epoca."""
 # eg.add('steps_per_epoch', 5000)
 """Quantidade de epocas."""
@@ -75,5 +75,6 @@ utiliza max ep pra encerrar."""
 
 eg.add('ac_kwargs:activation', tf.tanh)
 eg.add('ac_kwargs:output_activation', tf.tanh)
-eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
+# eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
 eg.run(ddpg_tf1, num_cpu=1)
+
