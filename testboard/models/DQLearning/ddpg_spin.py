@@ -15,7 +15,7 @@ import tensorflow as tf
 
 def env_fn():
     import gym_market
-    return gym.make('MarketEnv-v0', n_insiders=3, start_money=10000,
+    return gym.make('MarketEnv-v0', n_insiders=3, start_money=1000,
                     assets_prices=prices, insiders_preds=preds)
 
 # from keras.models import Sequential, Model
@@ -24,7 +24,8 @@ def env_fn():
 # import tensorflow as tf
 
 stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
-prices, preds = stockutil.prices_preds(start_year=2014, end_year=2014, period=11)
+prices, preds = stockutil.prices_preds(start_year=2014,
+                                       end_year=2014, period=11)
 
 # Get the environment and extract the number of actions.
 log_dir = "../../../results/logdir/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -74,5 +75,5 @@ utiliza max ep pra encerrar."""
 
 eg.add('ac_kwargs:activation', tf.tanh)
 eg.add('ac_kwargs:output_activation', tf.tanh)
-# eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
+eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
 eg.run(ddpg_tf1, num_cpu=1)
