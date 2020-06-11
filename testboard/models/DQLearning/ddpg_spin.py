@@ -16,14 +16,14 @@ import tensorflow as tf
 def env_fn():
     import gym_market
 
-    return gym.make('MarketEnv-v0', n_insiders=2, start_money=10000,
+    return gym.make('MarketEnv-v0', n_insiders=3, start_money=10000,
                     assets_prices=prices, insiders_preds=preds)
 # from keras.models import Sequential, Model
 # from keras.layers import Dense, Activation, Flatten, Input, Concatenate
 # from keras.optimizers import Adam
 # import tensorflow as tf
 
-stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6, 6, 9])
+stockutil = StockUtil(['PETR3', 'VALE3', 'ABEV3'], [6,6, 9])
 prices, preds = stockutil.prices_preds(start_year=2014,
                                        end_year=2014, period=11)
 
@@ -35,11 +35,11 @@ prices, preds = stockutil.prices_preds(start_year=2014,
 """Tamanho do experimento = epocas*passos por epoca."""
 eg = ExperimentGrid(name='ddpg-tf1-bench')
 eg.add('env_fn', env_fn, '', True)
-eg.add('seed', 9)
+eg.add('seed', 3853)
 """Passos por epoca."""
 # eg.add('steps_per_epoch', 5000)
 """Quantidade de epocas."""
-# eg.add('epochs', 1000)
+# eg.add('epochxs', 20000)
 # eg.add('replay_size', int(1e8))
 """Fator de desconto, mais perto de zero mais poder para recomensas atuais
 mais perto de um mais prioridade pra recomensas futuras."""
@@ -50,21 +50,21 @@ mais perto de um mais prioridade pra recomensas futuras."""
 """Taxa de aprendizagem do valor Q (critico)."""
 # eg.add('q_lr', 0.0001)
 """Quantidade de informacoes que é passada de uma só vez."""
-# eg.add('batch_size', 1024)
+# eg.add('batch_size', 9)
 """
 Enquanto o passo for menor que o valor (independe da epoca) acoes aleatorias.
 serao realizadas por motivos exploratorios
 """
-# eg.add('start_steps', 100000)
+# eg.add('start_steps', 40000)
 """Updates atualizam: LossQ, QVals, LossPi."""
 """Quantas passos esperar antes de comecar a
 atualizar o gradientes descendente."""
-# eg.add('update_after', [2500,)
+# eg.add('update_after', 1000)
 """De quanto em quantos passos atualizar o gradiente, sem perder ratio."""
-# eg.add('update_every', 50)
+# eg.add('update_every', 30)
 """Apos start_steps algoritmo usa a politica, mas
 exploracoes sao feitas via ruido."""
-# eg.add('act_noise', .1)
+eg.add('act_noise', 10)
 """Numero de episodios de teste."""
 # eg.add('num_test_episodes', 10)
 """Caso o ambiente possa ficar perdido no episodio,
@@ -75,6 +75,6 @@ utiliza max ep pra encerrar."""
 
 eg.add('ac_kwargs:activation', tf.tanh)
 eg.add('ac_kwargs:output_activation', tf.tanh)
-# eg.add('ac_kwargs:hidden_sizes', (1028, 1028))
+eg.add('ac_kwargs:hidden_sizes', (32, 32))
 eg.run(ddpg_tf1, num_cpu=1)
 
