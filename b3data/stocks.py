@@ -12,12 +12,12 @@ MEAN_PRICE = 'PREMED'
 VOLUME = 'VOLTOT'
 
 
-class Stocks():
+class Stocks:
     """Nani."""
 
-    def __init__(self, cod='PETR3', year=2014, start_month=1, period=5):
+    def __init__(self, cod='PETR3', year=2014, start_month=1, period=6):
         """Nani."""
-        path = "../../../../AURORA/data/COTAHIST_A" + str(year) + ".TXT.csv"
+        path = "data/COTAHIST_A" + str(year) + ".TXT.csv"
         files = glob.glob(path)
 
         for name in files:
@@ -28,12 +28,12 @@ class Stocks():
             data_frame = self._changing_column_data_type(data_frame)
             filtered = data_frame.loc[data_frame['CODNEG'] == cod]
 
-            if (start_month + period) > 12:
+            if (start_month + (period-1)) > 12:
                 next_month = 12
                 self.log("""Interval time surpassed the last month.
                             Last month will be 12""")
             else:
-                next_month = start_month + period
+                next_month = start_month + (period-1)
 
             first_date = str(year) + '-' + str(start_month) + '-01'
             last_date = str(year) + '-' + str(next_month) + '-30'

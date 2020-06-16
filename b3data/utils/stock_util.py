@@ -1,8 +1,8 @@
 import sys
 sys.path.append('../../')
 
-from ..stocks import Stocks, CLOSING
-from ..smote import duplicate_data
+from b3data.stocks import Stocks, CLOSING
+from b3data.utils.smote import duplicate_data
 
 class StockUtil(object):
 

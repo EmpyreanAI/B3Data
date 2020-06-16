@@ -2,7 +2,6 @@
 
 import numpy
 
-
 def duplicate_data(dataset):
     """Nani."""
     res = []
