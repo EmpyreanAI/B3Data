@@ -1,4 +1,30 @@
 import setuptools
+from setuptools import setup
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+
+
+class PostDevelopCommand(develop):
+    """Post-installation for development mode."""
+    def run(self):
+        develop.run(self)
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+    def run(self):
+        install.run(self)
+        donwload_and_extract()
+
+
+def donwload_and_extract():
+    import gdown
+    import zipfile
+
+    url = 'https://drive.google.com/uc?id=1QH_-bazUQNbsyK7WA-4XqBJJpqXL1W36'
+    output = 'data/bovespa.zip'
+    gdown.download(url, output, quiet=False)
+    with zipfile.ZipFile(output, 'r') as zip_ref:
+        zip_ref.extractall('data/')
 
 def requirements_list():
     list_of_req = []
@@ -27,5 +53,9 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    cmdclass={
+        'develop': PostDevelopCommand,
+        'install': PostInstallCommand,
+    },
     python_requires='>=3.6',
 )
