@@ -3,6 +3,7 @@
 import glob
 import numpy
 import pandas as pd
+from pkg_resources import reource_filename, Requirement
 
 CLOSING = 'PREULT'
 OPENING = 'PREABE'
@@ -17,7 +18,7 @@ class Stocks:
 
     def __init__(self, cod='PETR3', year=2014, start_month=1, period=6):
         """Nani."""
-        path = "../data/COTAHIST_A" + str(year) + ".TXT.csv"
+        path = resource_filename(Requirement.parse("b3data"), "../data/COTAHIST_A" + str(year) + ".TXT.csv")
         files = glob.glob(path)
 
         for name in files:
