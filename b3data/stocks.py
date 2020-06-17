@@ -17,7 +17,7 @@ class Stocks:
 
     def __init__(self, cod='PETR3', year=2014, start_month=1, period=6):
         """Nani."""
-        path = "data/COTAHIST_A" + str(year) + ".TXT.csv"
+        path = "../data/COTAHIST_A" + str(year) + ".TXT.csv"
         files = glob.glob(path)
 
         for name in files:
