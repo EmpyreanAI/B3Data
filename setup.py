@@ -8,6 +8,7 @@ class PostDevelopCommand(develop):
     """Post-installation for development mode."""
     def run(self):
         develop.run(self)
+        donwload_and_extract()
 
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
@@ -49,7 +50,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=requirements_list(),
     include_package_data=True,
-    package_data={"":['data/*csv']},
+    package_data={"":['data/*.csv']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
