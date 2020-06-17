@@ -48,6 +48,8 @@ setuptools.setup(
     url="https://github.com/EmpyreanAI/B3Data",
     packages=setuptools.find_packages(),
     install_requires=requirements_list(),
+    include_package_data=True,
+    package_data={"":['data/*csv']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
