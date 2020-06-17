@@ -3,6 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=python
 
 data/*.csv
+data/*.zip
 
 graphics/
 *.DS_Store
