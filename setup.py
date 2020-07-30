@@ -2,6 +2,8 @@ import setuptools
 from setuptools import setup
 from setuptools.command.develop import develop
 from setuptools.command.install import install
+from pkg_resources import resource_filename, Requirement
+import os.path
 
 
 class PostDevelopCommand(develop):
@@ -20,12 +22,12 @@ class PostInstallCommand(install):
 def donwload_and_extract():
     import gdown
     import zipfile
-
-    url = 'https://drive.google.com/uc?id=1QH_-bazUQNbsyK7WA-4XqBJJpqXL1W36'
-    output = 'data/bovespa.zip'
-    gdown.download(url, output, quiet=False)
-    with zipfile.ZipFile(output, 'r') as zip_ref:
-        zip_ref.extractall('data/')
+    if not os.path.exists(resource_filename(Requirement.parse("b3data"), "data/COTAHIST_A2010.TXT.csv")):
+        url = 'https://drive.google.com/uc?id=1QH_-bazUQNbsyK7WA-4XqBJJpqXL1W36'
+        output = 'data/bovespa.zip'
+        gdown.download(url, output, quiet=False)
+        with zipfile.ZipFile(output, 'r') as zip_ref:
+            zip_ref.extractall('data/')
 
 def requirements_list():
     list_of_req = []

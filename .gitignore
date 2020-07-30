@@ -5,6 +5,8 @@
 data/*.csv
 data/*.zip
 
+!data/trends/*.csv
+
 graphics/
 *.DS_Store
 
