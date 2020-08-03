@@ -30,9 +30,6 @@ class Trend:
         self.df = self.df[(self.df['Week'] >= l_bound) & \
                   (self.df['Week'] <= u_bound)]
 
-        print(self.df)
-        print(stock_df)
-
         for index in range(len(stock_df)):
             if i == len(self.df)-1:
                 trend_list.append(self.df['trend'].iloc[-1])
@@ -45,7 +42,6 @@ class Trend:
                     i += 1
                     trend_list.append(self.df['trend'].iloc[i])
 
-        print(len(trend_list))
         return trend_list
 
     def _get_lower_bound(self, stock_df):
